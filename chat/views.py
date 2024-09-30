@@ -3,8 +3,8 @@ from django.shortcuts import render
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
-from .models import User
-from .serializers import UserSerializer
+from .models import User,UserContact
+from .serializers import UserSerializer , UserContactsSerializer , ContactsSerializer
 import bcrypt
 
 
@@ -81,5 +81,83 @@ class UserSignup(APIView):
             return Response(new_user_data)
 
         return Response(curr_user_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+     
+#Define views for the user to connect with their contacts: 
+# Views to get all connections for the current User
+# Views to add a new connection to the current User 
+# Views to delete a connection from the user contact list 
 
-            
+class UserContact(APIView):
+    #The endpoint to get all connections for a particular user
+    def get(self,request):
+        user_id = request.data.get('id',"")
+
+        if not user_id:
+            return Response({"error":"A User ID is required to get contact list"}, status=status.HTTP_400_BAD_REQUEST)
+        
+        try:
+            user_id = int(user_id)
+            user_object = User.objects.get(id=user_id)
+        except ValueError:
+            return Response({"error":"Invalid User ID, ID Needs to be an integer"}, status=status.HTTP_400_BAD_REQUEST)
+        except User.DoesNotExist:
+            return Response({"error":"Invalid User ID, No such ID exists"}, status=status.HTTP_400_BAD_REQUEST)
+        
+        contact_list = user_object.get_contact_names_and_id()
+        
+        return Response(contact_list)
+    
+    def post(self,request):
+        user_id =  request.data.get("id")
+        contact_name = request.data.get("contact_name")
+        contact_phone_num = request.data.get("contact_phone_num")
+
+        if not (user_id and contact_name and contact_phone_num):
+            return Response({"error": "Invalid Data provided"} , status=status.HTTP_400_BAD_REQUEST)
+        
+        try:
+            User.objects.get(id=user_id)
+        except User.DoesNotExist:
+            return Response({"error":f"Invalid User ID"}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            contact_obj = User.objects.get(phone_num=contact_phone_num)
+            contact_id = contact_obj.id
+        except User.DoesNotExist:
+            return Response({"error":f"User with phone numer {contact_phone_num} does not exist"}, status=status.HTTP_400_BAD_REQUEST)
+
+        contact_data = {
+            "user" : user_id,
+            "contact" : contact_id,
+            "contact_name" : contact_name
+        }
+
+        contact_obj = ContactsSerializer(data=contact_data)
+
+        if contact_obj.is_valid():
+            contact_obj.save()
+            return Response({"success": "Contact added successfully"}, status=status.HTTP_201_CREATED)
+    
+        return Response(contact_obj.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    def delete(self,request):
+        user_id =  request.data.get("id")
+        contact_phone_num = request.data.get("contact_phone_num")
+
+        if not (user_id  and contact_phone_num):
+            return Response({"error": "Invalid Data provided"} , status=status.HTTP_400_BAD_REQUEST)
+        
+        try:
+            user_obj = User.objects.get(id=user_id)
+        except User.DoesNotExist:
+            return Response({"error":f"Invalid User ID"}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            contact_obj = User.objects.get(phone_num=contact_phone_num)
+        except User.DoesNotExist:
+            return Response({"error":f"User with phone numer {contact_phone_num} does not exist"}, status=status.HTTP_400_BAD_REQUEST)
+
+        user_obj.contacts.remove(contact_obj)
+
+        return Response({"success": "Contact deleted successfully"}, status=status.HTTP_200_OK)
+        
