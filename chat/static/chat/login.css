@@ -1,0 +1,23 @@
+
+
+body{
+    min-height: 100vh;
+    min-width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.login-form{
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    width: 600px;
+    font-size: 1.5em;
+    justify-content: center;
+    align-items: center;
+    background-color: black;
+    color: white;
+    padding: 20px;
+    border-radius: 15px;
+}
