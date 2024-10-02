@@ -43,3 +43,29 @@ class UserContact(models.Model):
 
     def __str__(self):
         return f"{self.user.first_name} -> {self.contact.first_name}"
+
+
+class Conversation(models.Model):
+    conversation_name = models.CharField(max_length=150,blank=True)
+    creator = models.ForeignKey(User,related_name='created_conversations',on_delete=models.CASCADE)
+    creation_date = models.DateField(auto_now_add=True)
+    participants = models.ManyToManyField(User, related_name='conversations')
+    last_updated = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.conversation_name
+    
+
+class Message(models.Model):
+    sender = models.ForeignKey(User,related_name="sent_messages",on_delete=models.CASCADE)
+    conversation = models.ForeignKey(Conversation,related_name="messages",on_delete=models.CASCADE)
+    date_time = models.DateTimeField(auto_now_add=True)
+    read_by = models.ManyToManyField(User,related_name='read_messages',blank=True)
+    message_content = models.TextField()
+
+    class Meta:
+        ordering = ['date_time']  # Sort messages by date and time
+
+    def __str__(self):
+        return f"Message from {self.sender.first_name} in {self.conversation.conversation_name} at {self.date_time}"
+
