@@ -3,12 +3,11 @@ import * as ContactDetails from '../api/requests/ContactDetails';
 
 
 function ChatsList() {
-    return <div className="list-group">
+    const contactDetailsOfOpenChats = ContactDetails.getContactDetailsOfOpenChats();
 
-        <button type="button" className="chat-contacts-menu-item">{ContactDetails.getContactDetails().firstName}</button>
-        <button type="button" className="chat-contacts-menu-item">A third button item</button>
-        <button type="button" className="chat-contacts-menu-item">A fourth button item</button>
+    return <div className="list-group">
+        {contactDetailsOfOpenChats.map((contactDetails) => (<button type="button" className=""> contactDetails.firstName </button>))}
     </div>
 }
 
-export default ChatsList
+export default ChatsList;
