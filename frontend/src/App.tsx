@@ -1,7 +1,7 @@
-import ChatsList from './components/ChatsList';
+import ChatsListCol from './components/ChatsListCol';
 
 function App() {
-  return <div><ChatsList /></div>
+  return <ChatsListCol/>;
 }
 
 export default App;
