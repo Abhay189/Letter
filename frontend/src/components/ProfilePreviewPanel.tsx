@@ -1,7 +1,15 @@
-import * as personalProfileDetails from '../api/requests/personalProfileDetails';
+import * as personal_profile_details from '../api/requests/personalProfileDetails';
 
-function ProfilePreviewPanel() {
-    return <button type="button" className="btn btn-profile-prev"> {personalProfileDetails.getPersonalProfileDetails().firstName + " " + personalProfileDetails.getPersonalProfileDetails().lastName} </button>
+interface Props {
+    personalProfileDetails: personal_profile_details.PersonalProfileDetails;
+}
+
+function ProfilePreviewPanel({personalProfileDetails}: Props) {
+    return <button 
+        type="button" 
+        className="btn btn-light"> 
+            {personalProfileDetails.firstName + " " + personalProfileDetails.lastName}   
+    </button>
 }
 
 export default ProfilePreviewPanel;

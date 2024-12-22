@@ -1,11 +1,8 @@
-import ChatsListCol from './components/ChatsListCol';
-import CurrentChatHeader from './components/CurrentChatHeader';
+import ChatsScreen from './components/ChatsScreen';
+
 
 function App() {
-  return <ChatsListCol/>;
-  //<CurrentChatHeader contactDetails={}/>;
-
-
+  return <ChatsScreen/>
 }
 
 export default App;

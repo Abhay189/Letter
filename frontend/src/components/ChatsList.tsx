@@ -8,10 +8,15 @@ import * as contactDetails from '../api/requests/contactDetails';
 import ChatPreviewPanel from './ChatPreviewPanel';
 
 
-function ChatsList() {
-    const contactDetailsOfOpenChats = contactDetails.getContactDetailsOfOpenChats();
-    const [selectedIndex, setSelectedIndex] = useState(-1);
+interface Props {
+    contactDetailsOfOpenChats: contactDetails.ContactDetails[];
+    selectedIndex: number;
+    setSelectedIndex: (selectedIndex: number) => (void);
+}
 
+function ChatsList({contactDetailsOfOpenChats, selectedIndex, setSelectedIndex}: Props) {
+    //console.log(contactDetailsOfOpenChats[0].id);
+    //console.log(contactDetailsOfOpenChats[1].id);
     return <div className="list-group">
         {contactDetailsOfOpenChats.map((contact_details, index) => (<ChatPreviewPanel contactDetails={contact_details} index={index} selectedIndex={selectedIndex} setSelectedIndex={setSelectedIndex} />))}
     </div>

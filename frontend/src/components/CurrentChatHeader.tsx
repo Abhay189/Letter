@@ -1,11 +1,17 @@
-import * as contactDetails from '../api/requests/contactDetails';
+import * as contact_details from '../api/requests/contactDetails';
 
 interface Props {
-    contactDetails: contactDetails.ContactDetails;
+    contactDetailsById: contact_details.ContactDetailsById;
+    selectedChatContactId: number;
 }
 
-function CurrentChatHeader({contactDetails}: Props) {
-    return <button type="button" className="btn btn-light"> {contactDetails.firstName + " " + contactDetails.lastName} </button>
+function CurrentChatHeader({ contactDetailsById, selectedChatContactId }: Props) {
+    return <button 
+        type="button" 
+        className="btn btn-profile-prev">
+            
+            {contactDetailsById[selectedChatContactId].name} 
+    </button>
 }
 
 export default CurrentChatHeader;
