@@ -11847,7 +11847,6 @@ textarea.form-control-lg {
 html, body {
   margin: 0;
   height: 100%;
-  overflow: hidden;
 }
 
 .chat-screen-row {
@@ -11866,7 +11865,10 @@ html, body {
 
 .chat-history {
   overflow-y: scroll;
-  height: 690px;
+  height: 685px;
+  background-image: url("img/speech-bubles-background.jpg");
+  background-repeat: no-repeat;
+  background-size: 1150px 900px;
 }
 
 .chats-list {
