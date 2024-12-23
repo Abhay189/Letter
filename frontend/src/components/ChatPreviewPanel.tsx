@@ -13,7 +13,7 @@ function ChatPreviewPanel({contactDetails, index, selectedIndex, setSelectedInde
 
     return <button
         type="button" 
-        className={ selectedIndex === index ? "btn btn-light active" : "btn btn-light"} 
+        className={ selectedIndex === index ? "chat-preview-panel btn btn-light active" : "chat-preview-panel btn btn-light"} 
         key={contactDetails.id}
         onClick={() => { setSelectedIndex(contactDetails.id); } }
         > 

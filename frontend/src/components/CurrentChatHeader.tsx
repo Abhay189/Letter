@@ -8,7 +8,7 @@ interface Props {
 function CurrentChatHeader({ contactDetailsById, selectedChatContactId }: Props) {
     return <button 
         type="button" 
-        className="btn btn-light">
+        className="btn btn-light rounded-0">
             
             {contactDetailsById[selectedChatContactId].name} 
     </button>

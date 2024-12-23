@@ -18,12 +18,52 @@ export function getContactDetailsOfAllContacts(): [ContactDetails[], ContactDeta
         {
         name: "Mary Jane",
         id: 1
+        },
+        {
+        name: "Mary Jane",
+        id: 2
+        },
+        {
+        name: "Mary Jane",
+        id: 3
+        },
+        {
+        name: "Mary Jane",
+        id: 4
+        },
+        {
+        name: "Mary Jane",
+        id: 5
+        },
+        {
+        name: "Mary Jane",
+        id: 6
+        },
+        {
+        name: "Mary Jane",
+        id: 7
+        },
+        {
+        name: "Mary Jane",
+        id: 8
+        },
+        {
+        name: "Mary Jane",
+        id: 9
         }
     ];
 
     const contactDetailsById: ContactDetailsById = {
         0: contactDetailsList[0],
-        1: contactDetailsList[1]
+        1: contactDetailsList[1],
+        2: contactDetailsList[2],
+        3: contactDetailsList[3],
+        4: contactDetailsList[4],
+        5: contactDetailsList[5],
+        6: contactDetailsList[6],
+        7: contactDetailsList[7],
+        8: contactDetailsList[8],
+        9: contactDetailsList[9]
     };
 
     return [contactDetailsList, contactDetailsById] ;

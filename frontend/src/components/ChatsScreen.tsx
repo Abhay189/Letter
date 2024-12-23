@@ -12,6 +12,7 @@ import ProfilePreviewPanel from '../components/ProfilePreviewPanel';
 import CurrentChatHeader from './CurrentChatHeader';
 import Row from './Row';
 import Column from './Column';
+import ChatHistory from './ChatHistory';
 
 function ChatsScreen() {
     const [[contactDetailsOfAllContacts, contactDetailsById], _] = useState(contact_details.getContactDetailsOfAllContacts());
@@ -20,15 +21,15 @@ function ChatsScreen() {
     const [personalProfileDetails, setPersonalProfileDetails] = useState(personal_profile_details.getPersonalProfileDetails());
 
     return <Fragment>
-        <Row id="chatScreenRow" className="" style={{}}>
-            <Column id="chatsAndProfileCol" className="d-grid gap-2" style={{}}>
+        <Row id="" className="chat-screen-row flex-grow-1" style={{}}>
+            <Column id="" className="chats-and-profile-col d-grid flex-shrink-0 align-self-start" style={{}}>
                 <ProfilePreviewPanel personalProfileDetails={personalProfileDetails}/>
                 <ChatsList contactDetailsOfOpenChats={contactDetailsOfOpenChats} selectedIndex={selectedChatContactId} setSelectedIndex={setSelectedChatContactId}/>
             </Column>  
-            <Column id="chatHistoryCol" className="" style={{}}>
+            <Column id="" className="chat-history-col flex-grow-1" style={{}}>
                 <CurrentChatHeader contactDetailsById={contactDetailsById} selectedChatContactId={selectedChatContactId}/>
-                
-                <input type="text"/> 
+                <ChatHistory/>
+                <input type="text" className="chat-text-input"/> 
             </Column>
         </Row>   
     </Fragment>

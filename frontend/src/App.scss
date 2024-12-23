@@ -1,6 +1,25 @@
-
-
 @import "../node_modules/bootstrap/scss/bootstrap";
+
+.chats-and-profile-col {
+    flex-basis: 350px;
+}
+
+.chat-history {
+    flex-basis: 600px;
+}
+
+.chats-list {
+    flex-basis: 600px;
+}
+
+.btn-profile-prev {
+    max-height: 36px;
+}
+
+.chat-preview-panel {
+    min-height: 50px;
+}
+
 
 .btn-profile-prev {
     background: rgb(222, 218, 218);
@@ -11,3 +30,5 @@
     background: rgb(160, 160, 160);
     
 }
+
+

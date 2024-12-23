@@ -17,7 +17,7 @@ interface Props {
 function ChatsList({contactDetailsOfOpenChats, selectedIndex, setSelectedIndex}: Props) {
     //console.log(contactDetailsOfOpenChats[0].id);
     //console.log(contactDetailsOfOpenChats[1].id);
-    return <div className="list-group">
+    return <div className="chats-list list-group gap-1 flex-grow-1 align-self-start overflow-auto">
         {contactDetailsOfOpenChats.map((contact_details, index) => (<ChatPreviewPanel contactDetails={contact_details} index={index} selectedIndex={selectedIndex} setSelectedIndex={setSelectedIndex} />))}
     </div>
 }
