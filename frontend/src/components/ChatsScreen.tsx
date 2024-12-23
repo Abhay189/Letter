@@ -29,7 +29,7 @@ function ChatsScreen() {
             <Column id="" className="chat-history-col flex-grow-1 flex-shrink-1" style={{}}>
                 <CurrentChatHeader contactDetailsById={contactDetailsById} selectedChatContactId={selectedChatContactId}/>
                 <ChatHistory/>
-                <input type="text" className="chat-text-input"/> 
+                <input type="text" className="chat-text-input" placeholder="Type a message"/> 
             </Column>
         </Row>   
     </Fragment>

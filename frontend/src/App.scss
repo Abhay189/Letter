@@ -53,4 +53,18 @@ html, body {
     
 }
 
+.text-input-sign-up-login {
+    color: white;
+    background-color: grey;
+}
+
+.text-input-sign-up-login::placeholder {
+    color: white;
+    opacity: 1; /* Firefox */
+  }
+  
+.text-input-sign-up-login::-ms-input-placeholder { /* Edge 12 -18 */
+    color: white;
+}
+
 
