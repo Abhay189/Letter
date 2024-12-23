@@ -7,7 +7,8 @@ interface Props {
 function ProfilePreviewPanel({personalProfileDetails}: Props) {
     return <button 
         type="button" 
-        className="btn btn-profile-prev rounded-0 flex-shrink-1 flex-grow-0"> 
+        className="btn profile-prev-panel rounded-0 flex-shrink-0 flex-grow-0"> 
+            <img src={"img/grey-circle.png"} width="54" height="35"/>
             {personalProfileDetails.firstName + " " + personalProfileDetails.lastName}   
     </button>
 }

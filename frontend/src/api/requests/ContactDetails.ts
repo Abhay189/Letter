@@ -50,6 +50,22 @@ export function getContactDetailsOfAllContacts(): [ContactDetails[], ContactDeta
         {
         name: "Mary Jane",
         id: 9
+        },
+        {
+        name: "Mary Jane",
+        id: 10
+        },
+        {
+        name: "Mary Jane",
+        id: 11
+        },
+        {
+        name: "Mary Jane",
+        id: 12
+        },
+        {
+        name: "Mary Jane",
+        id: 13
         }
     ];
 
@@ -63,7 +79,11 @@ export function getContactDetailsOfAllContacts(): [ContactDetails[], ContactDeta
         6: contactDetailsList[6],
         7: contactDetailsList[7],
         8: contactDetailsList[8],
-        9: contactDetailsList[9]
+        9: contactDetailsList[9],
+        10: contactDetailsList[10],
+        11: contactDetailsList[11],
+        12: contactDetailsList[12],
+        13: contactDetailsList[13],
     };
 
     return [contactDetailsList, contactDetailsById] ;

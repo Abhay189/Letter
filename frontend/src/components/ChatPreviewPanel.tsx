@@ -17,6 +17,7 @@ function ChatPreviewPanel({contactDetails, index, selectedIndex, setSelectedInde
         key={contactDetails.id}
         onClick={() => { setSelectedIndex(contactDetails.id); } }
         > 
+            <img src={"img/grey-circle.png"} width="54" height="35"/>
             { contactDetails.name }  
     </button >
 }

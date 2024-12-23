@@ -1,25 +1,44 @@
 @import "../node_modules/bootstrap/scss/bootstrap";
 
+
+html, body {
+    margin: 0; 
+    height: 100%; 
+    overflow: hidden
+}
+  
+
+.chat-screen-row {
+    overflow-x: hidden;
+    height: 100%;
+}
+
 .chats-and-profile-col {
     flex-basis: 350px;
+    height: 100%;
+}
+
+.chat-history-col{
+    height: 100%;
 }
 
 .chat-history {
-    flex-basis: 600px;
+    overflow-y: scroll;
+    height: 690px;
 }
 
 .chats-list {
-    flex-basis: 600px;
+    height: 96%;
+    overflow-y: scroll;
 }
 
-.btn-profile-prev {
-    max-height: 36px;
+.profile-prev-panel {
+    min-height: 50px;
 }
 
 .chat-preview-panel {
     min-height: 50px;
 }
-
 
 .btn-profile-prev {
     background: rgb(222, 218, 218);

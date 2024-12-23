@@ -21,12 +21,12 @@ function ChatsScreen() {
     const [personalProfileDetails, setPersonalProfileDetails] = useState(personal_profile_details.getPersonalProfileDetails());
 
     return <Fragment>
-        <Row id="" className="chat-screen-row flex-grow-1" style={{}}>
+        <Row id="" className="chat-screen-row" style={{}}>
             <Column id="" className="chats-and-profile-col d-grid flex-shrink-0 align-self-start" style={{}}>
                 <ProfilePreviewPanel personalProfileDetails={personalProfileDetails}/>
                 <ChatsList contactDetailsOfOpenChats={contactDetailsOfOpenChats} selectedIndex={selectedChatContactId} setSelectedIndex={setSelectedChatContactId}/>
             </Column>  
-            <Column id="" className="chat-history-col flex-grow-1" style={{}}>
+            <Column id="" className="chat-history-col flex-grow-1 flex-shrink-1" style={{}}>
                 <CurrentChatHeader contactDetailsById={contactDetailsById} selectedChatContactId={selectedChatContactId}/>
                 <ChatHistory/>
                 <input type="text" className="chat-text-input"/> 
