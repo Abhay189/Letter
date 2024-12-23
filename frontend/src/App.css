@@ -11906,4 +11906,22 @@ html, body {
   color: white;
 }
 
+.sign-up-login-screen {
+  display: flex;
+}
+
+.sign-up-login-screen {
+  width: 100%;
+  justify-content: space-evenly;
+  margin-top: 80px;
+}
+
+.mailGraphic {
+  margin-top: 80px;
+}
+
+.submit-btn-sign-up-login {
+  width: 80px;
+}
+
 /*# sourceMappingURL=App.css.map */
