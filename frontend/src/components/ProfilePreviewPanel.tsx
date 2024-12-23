@@ -7,7 +7,7 @@ interface Props {
 function ProfilePreviewPanel({personalProfileDetails}: Props) {
     return <button 
         type="button" 
-        className="btn btn-light"> 
+        className="btn btn-profile-prev"> 
             {personalProfileDetails.firstName + " " + personalProfileDetails.lastName}   
     </button>
 }

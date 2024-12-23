@@ -10,6 +10,8 @@ import * as personal_profile_details from '../api/requests/personalProfileDetail
 import ChatsList from '../components/ChatsList';
 import ProfilePreviewPanel from '../components/ProfilePreviewPanel';
 import CurrentChatHeader from './CurrentChatHeader';
+import Row from './Row';
+import Column from './Column';
 
 function ChatsScreen() {
     const [[contactDetailsOfAllContacts, contactDetailsById], _] = useState(contact_details.getContactDetailsOfAllContacts());
@@ -17,12 +19,18 @@ function ChatsScreen() {
     const [selectedChatContactId, setSelectedChatContactId] = useState(0);
     const [personalProfileDetails, setPersonalProfileDetails] = useState(personal_profile_details.getPersonalProfileDetails());
 
-    return <Fragment key={8}>
-        <div id="chatsAndProfileCol" className="d-grid gap-2">
-            <ProfilePreviewPanel personalProfileDetails={personalProfileDetails}/>
-            <ChatsList contactDetailsOfOpenChats={contactDetailsOfOpenChats} selectedIndex={selectedChatContactId} setSelectedIndex={setSelectedChatContactId}/>
-        </div>  
-        <CurrentChatHeader contactDetailsById={contactDetailsById} selectedChatContactId={selectedChatContactId}/>
+    return <Fragment>
+        <Row id="chatScreenRow" className="" style={{}}>
+            <Column id="chatsAndProfileCol" className="d-grid gap-2" style={{}}>
+                <ProfilePreviewPanel personalProfileDetails={personalProfileDetails}/>
+                <ChatsList contactDetailsOfOpenChats={contactDetailsOfOpenChats} selectedIndex={selectedChatContactId} setSelectedIndex={setSelectedChatContactId}/>
+            </Column>  
+            <Column id="chatHistoryCol" className="" style={{}}>
+                <CurrentChatHeader contactDetailsById={contactDetailsById} selectedChatContactId={selectedChatContactId}/>
+                
+                <input type="text"/> 
+            </Column>
+        </Row>   
     </Fragment>
   
   }

@@ -8,7 +8,7 @@ interface Props {
 function CurrentChatHeader({ contactDetailsById, selectedChatContactId }: Props) {
     return <button 
         type="button" 
-        className="btn btn-profile-prev">
+        className="btn btn-light">
             
             {contactDetailsById[selectedChatContactId].name} 
     </button>
