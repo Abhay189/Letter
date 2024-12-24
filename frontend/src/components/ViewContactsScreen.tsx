@@ -9,10 +9,10 @@ import * as personal_profile_details from '../api/requests/personalProfileDetail
 //components imports:
 import ChatsList from '../components/ChatsList';
 import ProfilePreviewPanel from '../components/ProfilePreviewPanel';
-import CurrentChatHeader from './CurrentChatHeader';
 import Row from './Row';
 import Column from './Column';
-import ContactDetails from './ContactDetails';
+import ViewContactDetailsScreen from './ViewContactDetailsScreen';
+
 
 function ViewContactsScreen() {
     const [[contactDetailsOfAllContacts, contactDetailsById], _] = useState(contact_details.getContactDetailsOfAllContacts());
@@ -25,13 +25,10 @@ function ViewContactsScreen() {
                 <div>
                     <p className="all-contacts-label">All Contacts</p>
                 </div>
-                <ChatsList contactDetailsOfOpenChats={contactDetailsOfAllContacts} selectedIndex={selectedContactId} setSelectedIndex={setselectedContactId}/>
+                <ChatsList className="all-contacts-list" contactDetailsOfOpenChats={contactDetailsOfAllContacts} selectedIndex={selectedContactId} setSelectedIndex={setselectedContactId}/>
+                <button className="add-contact-btn btn btn-secondary"> Add Contact </button>
             </Column>  
-            <Column id="" className="chat-history-col flex-grow-1 flex-shrink-1" style={{}}>
-                <CurrentChatHeader contactDetailsById={contactDetailsById} selectedChatContactId={selectedContactId}/>
-                <ContactDetails contactDetailsById={contactDetailsById} selectedChatContactId={selectedContactId} setselectedContactId={setselectedContactId}/>
-                <button type="button" className="remove-contact-btn btn btn-danger"> Remove Contact </button>
-            </Column>
+            <ViewContactDetailsScreen contactDetailsById={contactDetailsById} selectedContactId={selectedContactId} setselectedContactId={setselectedContactId}/>
         </Row>   
     </Fragment>
   

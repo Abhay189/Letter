@@ -24,7 +24,7 @@ function ChatsScreen() {
         <Row id="" className="chat-screen-row" style={{}}>
             <Column id="" className="chats-and-profile-col d-grid flex-shrink-0 align-self-start" style={{}}>
                 <ProfilePreviewPanel personalProfileDetails={personalProfileDetails}/>
-                <ChatsList contactDetailsOfOpenChats={contactDetailsOfOpenChats} selectedIndex={selectedChatContactId} setSelectedIndex={setSelectedChatContactId}/>
+                <ChatsList className="" contactDetailsOfOpenChats={contactDetailsOfOpenChats} selectedIndex={selectedChatContactId} setSelectedIndex={setSelectedChatContactId}/>
             </Column>  
             <Column id="" className="chat-history-col flex-grow-1 flex-shrink-1" style={{}}>
                 <CurrentChatHeader contactDetailsById={contactDetailsById} selectedChatContactId={selectedChatContactId}/>
