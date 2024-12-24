@@ -11871,6 +11871,13 @@ html, body {
   background-size: 1150px 900px;
 }
 
+.contact-details {
+  overflow-y: scroll;
+  margin-top: 20px;
+  margin-left: 40px;
+  margin-bottom: 10px;
+}
+
 .chats-list {
   height: 96%;
   overflow-y: scroll;
