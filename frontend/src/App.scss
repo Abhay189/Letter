@@ -37,6 +37,11 @@ html, body {
     margin-bottom: 20px;
 }
 
+.all-contacts-label {
+    margin-top: 10px;
+    justify-self: center;
+}
+
 .chats-list {
     height: 96%;
     overflow-y: scroll;
@@ -44,6 +49,11 @@ html, body {
 
 .profile-prev-panel {
     min-height: 50px;
+}
+
+.go-back-to-chat-screen-btn {
+    min-height: 30px;
+    border-radius: 0;
 }
 
 .chat-preview-panel {

@@ -17,12 +17,14 @@ import ContactDetails from './ContactDetails';
 function ViewContactsScreen() {
     const [[contactDetailsOfAllContacts, contactDetailsById], _] = useState(contact_details.getContactDetailsOfAllContacts());
     const [selectedContactId, setselectedContactId] = useState(0);
-    const [personalProfileDetails, setPersonalProfileDetails] = useState(personal_profile_details.getPersonalProfileDetails());
 
     return <Fragment>
         <Row id="" className="chat-screen-row" style={{}}>
             <Column id="" className="chats-and-profile-col d-grid flex-shrink-0 align-self-start" style={{}}>
-                <ProfilePreviewPanel personalProfileDetails={personalProfileDetails}/>
+                <button className="go-back-to-chat-screen-btn btn btn-secondary"> Back to Chats </button>
+                <div>
+                    <p className="all-contacts-label">All Contacts</p>
+                </div>
                 <ChatsList contactDetailsOfOpenChats={contactDetailsOfAllContacts} selectedIndex={selectedContactId} setSelectedIndex={setselectedContactId}/>
             </Column>  
             <Column id="" className="chat-history-col flex-grow-1 flex-shrink-1" style={{}}>
