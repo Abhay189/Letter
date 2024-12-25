@@ -11936,6 +11936,16 @@ html, body {
   display: flex;
 }
 
+.name-text-input-add-contact, .phone-num-text-input-add-contact {
+  margin-left: 50px;
+  margin-top: 10px;
+}
+
+.add-contact-header {
+  margin-left: 525px;
+  margin-top: 10px;
+}
+
 .sign-up-login-screen {
   width: 100%;
   justify-content: space-evenly;
