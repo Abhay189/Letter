@@ -26,11 +26,11 @@ export function getPersonalProfileDetails(): PersonalProfileDetails {
 
 export function userSignUp(firstName: string, lastName: string, phoneNum: string, email: string, password: string): boolean {
     //will make http request using axios to get contact details, values will be hardcoded for now
-        console.log(firstName);
-        console.log(lastName);
-        console.log(phoneNum);
-        console.log(email);
-        console.log(password);
+        // console.log(firstName);
+        // console.log(lastName);
+        // console.log(phoneNum);
+        // console.log(email);
+        // console.log(password);
         
     //make http post request to send personalProfileCredentials to server and see if they are valid
     const userSignUpWasSuccessful = true;

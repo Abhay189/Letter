@@ -10,6 +10,11 @@ function ContactDetails({ contactDetailsById, selectedChatContactId, setselected
        <label> First and Last Name: </label>
        <br/>
        <b> {contactDetailsById[selectedChatContactId].name} </b>
+       <br/>
+
+       <label> Phone Number: </label>
+       <br/>
+       <b> PLACEHOLDER </b>
     </div>
 }
 

@@ -14,9 +14,21 @@ import Column from './Column';
 import ViewContactDetailsScreen from './ViewContactDetailsScreen';
 import AddContactScreen from './AddContactScreen';
 
+//misc imports
+import viewContactsScreenSubscreenState from '../exportedObjs/viewContactsScreen';
+
 function ViewContactsScreen() {
     const [[contactDetailsOfAllContacts, contactDetailsById], setContactDetailsListAndById] = useState(contact_details.getContactDetailsOfAllContacts());
     const [selectedContactId, setselectedContactId] = useState(0);
+    let [whichSubScreenShowing, setWhichSubScreenShowing] = useState(viewContactsScreenSubscreenState.SHOW_VIEW_CONTACT_DETAILS_SCREEN);
+
+    const getSubScreen = () => {
+        return whichSubScreenShowing === viewContactsScreenSubscreenState.SHOW_VIEW_CONTACT_DETAILS_SCREEN
+        ? 
+        <ViewContactDetailsScreen contactDetailsById={contactDetailsById} selectedContactId={selectedContactId} setselectedContactId={setselectedContactId} setContactDetailsListAndById={setContactDetailsListAndById}/> 
+        : 
+        <AddContactScreen/>;
+    }
 
     return <Fragment>
         <Row id="" className="chat-screen-row" style={{}}>
@@ -25,12 +37,10 @@ function ViewContactsScreen() {
                 <div>
                     <p className="all-contacts-label">All Contacts</p>
                 </div>
-                <ChatsList className="all-contacts-list" contactDetailsOfOpenChats={contactDetailsOfAllContacts} selectedIndex={selectedContactId} setSelectedIndex={setselectedContactId}/>
-                <button className="go-to-add-contact-screen-btn btn btn-secondary"> Add Contact </button>
+                <ChatsList className="all-contacts-list" contactDetailsOfOpenChats={contactDetailsOfAllContacts} selectedIndex={selectedContactId} setSelectedIndex={setselectedContactId} extraOnClickActions={setWhichSubScreenShowing}/>
+                <button className="go-to-add-contact-screen-btn btn btn-secondary" onClick={() => {setWhichSubScreenShowing(viewContactsScreenSubscreenState.SHOW_ADD_CONTACT_SCREEN);} }> Add Contact </button>
             </Column>  
-            <ViewContactDetailsScreen contactDetailsById={contactDetailsById} selectedContactId={selectedContactId} setselectedContactId={setselectedContactId} setContactDetailsListAndById={setContactDetailsListAndById}/>
-            <AddContactScreen/>
-
+            {getSubScreen()}
         </Row>   
     </Fragment>
   

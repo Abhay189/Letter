@@ -5,10 +5,10 @@ import ViewContactsScreen from './components/ViewContactsScreen';
 
 
 function App() {
-  return <ChatsScreen/>
+  //return <ChatsScreen/>
   //return <SignUpScreen/>
   //return <LoginScreen/>
-  //return <ViewContactsScreen/>
+  return <ViewContactsScreen/>
 }
 
 export default App;
