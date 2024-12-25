@@ -1,3 +1,7 @@
+//internal imports:
+import * as contactDetails from '../api/requests/contactDetails';
+
+//components imports:
 import * as contact_details from '../api/requests/contactDetails';
 import Column from './Column';
 import ContactDetails from './ContactDetails';
@@ -7,6 +11,7 @@ interface Props {
     contactDetailsById: contact_details.ContactDetailsById;
     selectedContactId: number;
     setselectedContactId: (selectedId: number) => (void);
+    setContactDetailsListAndById: Function; //used generic Function type as the following type (which is more specific) was not working: (newContactDetailsListAndById: [contactDetails.ContactDetails[] | contact_details.ContactDetailsById]) => (void);
 }
 
 function ViewContactDetailsScreen({contactDetailsById, selectedContactId, setselectedContactId}: Props){

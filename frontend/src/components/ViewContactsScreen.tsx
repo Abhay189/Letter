@@ -12,10 +12,10 @@ import ProfilePreviewPanel from '../components/ProfilePreviewPanel';
 import Row from './Row';
 import Column from './Column';
 import ViewContactDetailsScreen from './ViewContactDetailsScreen';
-
+import AddContactScreen from './AddContactScreen';
 
 function ViewContactsScreen() {
-    const [[contactDetailsOfAllContacts, contactDetailsById], _] = useState(contact_details.getContactDetailsOfAllContacts());
+    const [[contactDetailsOfAllContacts, contactDetailsById], setContactDetailsListAndById] = useState(contact_details.getContactDetailsOfAllContacts());
     const [selectedContactId, setselectedContactId] = useState(0);
 
     return <Fragment>
@@ -26,9 +26,11 @@ function ViewContactsScreen() {
                     <p className="all-contacts-label">All Contacts</p>
                 </div>
                 <ChatsList className="all-contacts-list" contactDetailsOfOpenChats={contactDetailsOfAllContacts} selectedIndex={selectedContactId} setSelectedIndex={setselectedContactId}/>
-                <button className="add-contact-btn btn btn-secondary"> Add Contact </button>
+                <button className="go-to-add-contact-screen-btn btn btn-secondary"> Add Contact </button>
             </Column>  
-            <ViewContactDetailsScreen contactDetailsById={contactDetailsById} selectedContactId={selectedContactId} setselectedContactId={setselectedContactId}/>
+            <ViewContactDetailsScreen contactDetailsById={contactDetailsById} selectedContactId={selectedContactId} setselectedContactId={setselectedContactId} setContactDetailsListAndById={setContactDetailsListAndById}/>
+            <AddContactScreen/>
+
         </Row>   
     </Fragment>
   

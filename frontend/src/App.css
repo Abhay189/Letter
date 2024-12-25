@@ -11866,9 +11866,9 @@ html, body {
 .chat-history {
   overflow-y: scroll;
   height: 685px;
-  background-image: url("img/speech-bubles-background.jpg");
-  background-repeat: no-repeat;
-  background-size: 1150px 900px;
+  background-image: url("img/speech-bubbles-background.jpg");
+  background-repeat: repeat;
+  background-size: cover;
 }
 
 .contact-details {
@@ -11897,7 +11897,7 @@ html, body {
   border-radius: 0;
 }
 
-.add-contact-btn {
+.go-to-add-contact-screen-btn {
   min-height: 30px;
   border-radius: 0;
 }
