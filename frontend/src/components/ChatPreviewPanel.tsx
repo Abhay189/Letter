@@ -2,7 +2,7 @@ import * as contact_details from '../api/requests/contactDetails';
 import SetSelectedIndexFunc from './ChatsList';
 
 //misc imports
-import viewContactsScreenSubscreenState from '../exportedObjs/viewContactsScreen';
+import {viewContactsScreenSubscreenState} from './ViewContactsScreen';
 
 interface Props {
     contactDetails: contact_details.ContactDetails;

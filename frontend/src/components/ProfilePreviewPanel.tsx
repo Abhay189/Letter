@@ -5,12 +5,20 @@ interface Props {
 }
 
 function ProfilePreviewPanel({personalProfileDetails}: Props) {
-    return <button 
-        type="button" 
-        className="btn profile-prev-panel rounded-0 flex-shrink-0 flex-grow-0"> 
-            <img src={"img/grey-circle.png"} width="54" height="35"/>
-            {personalProfileDetails.firstName + " " + personalProfileDetails.lastName}   
-    </button>
+    return <>
+        
+        <nav className="subtopnav dropdown">
+            <div className="btn profile-prev-panel rounded-0 flex-shrink-0 flex-grow-1 subtopnav-dropdown-btn subtopnav-item"> 
+                    <img src={"img/grey-circle.png"} width="54" height="35"/>
+                    {personalProfileDetails.firstName + " " + personalProfileDetails.lastName}   
+            </div>
+            <div className="subtopnav-dropdown-items">
+                <a className="subtopnav-dropdown-item" href="./personal-profile"> View Profile </a>
+                <br/>
+                <a className="subtopnav-dropdown-item" href="./contacts"> View Contacts </a>
+            </div>
+        </nav> 
+    </>
 }
 
 export default ProfilePreviewPanel;

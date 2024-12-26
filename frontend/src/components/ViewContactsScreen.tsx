@@ -15,9 +15,14 @@ import ViewContactDetailsScreen from './ViewContactDetailsScreen';
 import AddContactScreen from './AddContactScreen';
 
 //misc imports
-import viewContactsScreenSubscreenState from '../exportedObjs/viewContactsScreen';
+//import viewContactsScreenSubscreenState from '../exportedObjs/viewContactsScreen';
 
-function ViewContactsScreen() {
+export const viewContactsScreenSubscreenState = {
+    SHOW_VIEW_CONTACT_DETAILS_SCREEN: 0,
+    SHOW_ADD_CONTACT_SCREEN: 1
+} 
+
+export function ViewContactsScreen() {
     const [[contactDetailsOfAllContacts, contactDetailsById], setContactDetailsListAndById] = useState(contact_details.getContactDetailsOfAllContacts());
     const [selectedContactId, setselectedContactId] = useState(0);
     let [whichSubScreenShowing, setWhichSubScreenShowing] = useState(viewContactsScreenSubscreenState.SHOW_VIEW_CONTACT_DETAILS_SCREEN);
@@ -44,7 +49,4 @@ function ViewContactsScreen() {
         </Row>   
     </Fragment>
   
-  }
-  
-  export default ViewContactsScreen;
-  
+  }  
