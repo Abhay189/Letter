@@ -9,7 +9,7 @@ function ProfilePreviewPanel({personalProfileDetails}: Props) {
         
         <nav className="subtopnav dropdown">
             <div className="btn profile-prev-panel rounded-0 flex-shrink-0 flex-grow-1 subtopnav-dropdown-btn subtopnav-item"> 
-                    <img src={"img/grey-circle.png"} width="54" height="35"/>
+                    <img src={"/img/grey-circle.png"} width="54" height="35"/>
                     {personalProfileDetails.firstName + " " + personalProfileDetails.lastName}   
             </div>
             <div className="subtopnav-dropdown-items">

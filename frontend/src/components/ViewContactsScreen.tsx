@@ -13,6 +13,7 @@ import Row from './Row';
 import Column from './Column';
 import ViewContactDetailsScreen from './ViewContactDetailsScreen';
 import AddContactScreen from './AddContactScreen';
+import { useParams, Params } from 'react-router';
 
 //misc imports
 //import viewContactsScreenSubscreenState from '../exportedObjs/viewContactsScreen';
@@ -22,9 +23,33 @@ export const viewContactsScreenSubscreenState = {
     SHOW_ADD_CONTACT_SCREEN: 1
 } 
 
+const defaultInitSelectedContactId = 0; //should be -1 (leading to a blank screen being rendered in place of the contact info portion of the screen) but right now, setting it to -1 causes an error because the screen tries to render the name of the contact, but no contact is selected and so it can't render it
+
+function returnDefaultParamValIfNoneProvided(params: Readonly<Params<string>>): number {
+    if(Object.keys(params).length !== 0){
+        const initSelectedContactId = convertInitSelectedContactIdToValidValue(params.initSelectedContactId);
+        return initSelectedContactId;
+    } else {
+        return defaultInitSelectedContactId; //default param val
+    }
+}
+
+function convertInitSelectedContactIdToValidValue(providedVal: any){
+    const initSelectedContactIdToValidValue = parseInt(providedVal);
+    if (Number.isNaN(initSelectedContactIdToValidValue) || initSelectedContactIdToValidValue < -1) {
+        const validInitSelectedContactId = defaultInitSelectedContactId;
+        return validInitSelectedContactId;
+    } else {
+        return initSelectedContactIdToValidValue;
+    }
+}
+
 export function ViewContactsScreen() {
+    const params = useParams();
+    const initSelectedContactId = returnDefaultParamValIfNoneProvided(params); 
+    const [selectedContactId, setselectedContactId] = useState(initSelectedContactId);   
+
     const [[contactDetailsOfAllContacts, contactDetailsById], setContactDetailsListAndById] = useState(contact_details.getContactDetailsOfAllContacts());
-    const [selectedContactId, setselectedContactId] = useState(0);
     let [whichSubScreenShowing, setWhichSubScreenShowing] = useState(viewContactsScreenSubscreenState.SHOW_VIEW_CONTACT_DETAILS_SCREEN);
 
     const getSubScreen = () => {
@@ -38,7 +63,7 @@ export function ViewContactsScreen() {
     return <Fragment>
         <Row id="" className="chat-screen-row" style={{}}>
             <Column id="" className="chats-and-profile-col d-grid flex-shrink-0 align-self-start" style={{}}>
-                <button className="go-back-to-chat-screen-btn btn btn-secondary"> Back to Chats </button>
+                <button className="go-back-to-chat-screen-btn btn btn-secondary" onClick={() => {window.location.href='/chats'}}> Back to Chats </button>
                 <div>
                     <p className="all-contacts-label">All Contacts</p>
                 </div>

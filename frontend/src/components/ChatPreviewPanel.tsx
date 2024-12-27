@@ -24,7 +24,7 @@ function ChatPreviewPanel({contactDetails, index, selectedIndex, setSelectedInde
             extraOnClickActions(viewContactsScreenSubscreenState.SHOW_VIEW_CONTACT_DETAILS_SCREEN);
             } }
         > 
-            <img src={"img/grey-circle.png"} width="54" height="35"/>
+            <img src={"/img/grey-circle.png"} width="54" height="35"/>
             { contactDetails.name }  
     </button >
 }

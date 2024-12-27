@@ -8,8 +8,11 @@ interface Props {
 function CurrentChatHeader({ contactDetailsById, selectedChatContactId }: Props) {
     return <button 
         type="button" 
-        className="btn btn-light rounded-0 flex-grow-0 flex-shrink-0">
-            <img src={"img/grey-circle.png"} width="54" height="35"/>
+        className="btn btn-light rounded-0 flex-grow-0 flex-shrink-0"
+        onClick={() => {
+            window.location.href='/contacts/'+ selectedChatContactId;
+        }}>
+            <img src={"/img/grey-circle.png"} width="54" height="35"/>
             {contactDetailsById[selectedChatContactId].name} 
     </button>
 }
