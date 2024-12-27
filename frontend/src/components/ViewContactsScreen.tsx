@@ -23,7 +23,7 @@ export const viewContactsScreenSubscreenState = {
     SHOW_ADD_CONTACT_SCREEN: 1
 } 
 
-const defaultInitSelectedContactId = 0; //should be -1 (leading to a blank screen being rendered in place of the contact info portion of the screen) but right now, setting it to -1 causes an error because the screen tries to render the name of the contact, but no contact is selected and so it can't render it
+const defaultInitSelectedContactId = -1;
 
 function returnDefaultParamValIfNoneProvided(params: Readonly<Params<string>>): number {
     if(Object.keys(params).length !== 0){
@@ -70,7 +70,7 @@ export function ViewContactsScreen() {
                 <ChatsList className="all-contacts-list" contactDetailsOfOpenChats={contactDetailsOfAllContacts} selectedIndex={selectedContactId} setSelectedIndex={setselectedContactId} extraOnClickActions={setWhichSubScreenShowing}/>
                 <button className="go-to-add-contact-screen-btn btn btn-secondary" onClick={() => {setWhichSubScreenShowing(viewContactsScreenSubscreenState.SHOW_ADD_CONTACT_SCREEN);} }> Add Contact </button>
             </Column>  
-            {getSubScreen()}
+            { (selectedContactId !== -1) ? getSubScreen() : null /*does not render any contact details (blank screen will show) if no contact is selected (ie. selectedContactId = -1). This is because an error will occur because the screen tries to render the name of the contact, but no contact is selected and so it can't render it*/} 
         </Row>   
     </Fragment>
   
