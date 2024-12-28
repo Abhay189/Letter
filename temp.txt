@@ -1,0 +1,18 @@
+switched mysql database to a docker container. 
+Connected django app to the mysql database container. 
+
+
+
+Steps to start the backend server : 
+
+make a python environment local to your computer : 
+    python -m venv myenv
+
+activate the py env: 
+    myenv\Scripts\activate
+
+
+download python packages into the py env: 
+    pip install -r requirements.txt
+
+

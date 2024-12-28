@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  mysql: 
+    image: "mysql"
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: abhay532 
+    volumes:
+      - mysql-data:/var/lib/mysql  # Map a named volume to persist data
+
+volumes:
+  mysql-data:
