@@ -1,3 +1,7 @@
+
+
+import { _get, _post, _delete } from '../apiClient';
+
 export interface ContactDetails {
     name: string;
     id: number;
@@ -6,6 +10,76 @@ export interface ContactDetails {
 export interface ContactDetailsById {
     [id: number]: ContactDetails;
 }
+
+
+// function convertObjectToType<T, U>(
+//   original: T,
+//   mapping: Record<keyof T, keyof U>
+// ): U {
+//   const transformed: Partial<U> = {};
+//   for (const key in original) {
+//     const mappedKey = mapping[key as keyof T];
+//     if (mappedKey) {
+//       transformed[mappedKey] = original[key];
+//     }
+//   }
+//   return transformed as U;
+// }
+
+// Function to log in a user
+export async function loginUser(email: string, phoneNum: string, password: string) {
+    const response = await _post('/api/login', {
+        email,
+        phone_num: phoneNum,
+        password,
+    });
+    return response.data; // Store the received data
+}
+
+// Function to sign up a new user
+export async function signUpUser(firstName: string, lastName: string, phoneNum: string, email: string, password: string) {
+    const response = await _post('/api/signup', {
+        first_name: firstName,
+        last_name: lastName,
+        phone_num: phoneNum,
+        email,
+        password,
+    });
+    return response.data; // Store the received data
+}
+
+// Function to get all contacts for a user
+export async function getUserContacts(userId: string) {
+    const response = await _get('/api/contacts', {
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        params: { id: userId }, // Pass user ID as a parameter
+    });
+    return response.data; // Store the received data
+}
+
+// Function to add a new contact
+export async function addContact(userId: string, contactName: string, contactPhoneNum: string) {
+    const response = await _post('/api/contacts', {
+        id: userId,
+        contact_name: contactName,
+        contact_phone_num: contactPhoneNum,
+    });
+    return response.data; // Store the received data
+}
+
+// Function to delete a contact
+export async function deleteContact(userId: string, contactPhoneNum: string) {
+    const response = await _delete('/api/contacts', {
+        data: {
+            id: userId,
+            contact_phone_num: contactPhoneNum,
+        },
+    });
+    return response.data; // Store the received data
+}
+
 
 
 export function getContactDetailsOfAllContacts(): [ContactDetails[], ContactDetailsById] {
