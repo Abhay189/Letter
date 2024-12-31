@@ -2,7 +2,7 @@ import * as contact_details from '../api/requests/contactDetails';
 import SetSelectedIndexFunc from './ChatsList';
 
 //misc imports
-import viewContactsScreenSubscreenState from '../exportedObjs/viewContactsScreen';
+import {viewContactsScreenSubscreenState} from './ViewContactsScreen';
 
 interface Props {
     contactDetails: contact_details.ContactDetails;
@@ -24,7 +24,7 @@ function ChatPreviewPanel({contactDetails, index, selectedIndex, setSelectedInde
             extraOnClickActions(viewContactsScreenSubscreenState.SHOW_VIEW_CONTACT_DETAILS_SCREEN);
             } }
         > 
-            <img src={"img/grey-circle.png"} width="54" height="35"/>
+            <img src={"/img/grey-circle.png"} width="54" height="35"/>
             { contactDetails.name }  
     </button >
 }

@@ -11890,6 +11890,8 @@ html, body {
 
 .profile-prev-panel {
   min-height: 50px;
+  padding-left: 10px;
+  padding-right: 10px;
 }
 
 .go-back-to-chat-screen-btn {
@@ -11958,6 +11960,45 @@ html, body {
 
 .submit-btn-sign-up-login {
   width: 80px;
+}
+
+.subtopnav * {
+  display: inline-block;
+}
+
+.subtopnav-dropdown-items {
+  position: absolute;
+  display: none;
+  border-style: solid;
+}
+
+.subtopnav, .subtopnav-dropdown-items {
+  background-color: white;
+  justify-self: center;
+}
+
+.dropdown:hover > .subtopnav-dropdown-items, .dropdown:active > .subtopnav-dropdown-items {
+  display: block;
+}
+
+.subtopnav a:link,
+.subtopnav a:visited {
+  color: black;
+}
+
+.subtopnav a:hover {
+  background-color: grey;
+  color: #ffffff;
+}
+
+.subtopnav a {
+  text-decoration: none;
+}
+
+.subtopnav-dropdown-item {
+  border: 0.5px;
+  width: 200px;
+  padding: 8px 10px 8px 10px;
 }
 
 /*# sourceMappingURL=App.css.map */
