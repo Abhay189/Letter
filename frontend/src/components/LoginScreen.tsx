@@ -21,7 +21,7 @@ const email = document.getElementById("first-name-text-input-sign-up");
                 <input type="text" id="phone-num-text-input-login" className="text-input-sign-up-login" placeholder="phone number .."/>
                 <input type="text" id="password-text-input-login" className="text-input-sign-up-login" placeholder="password .."/>
                 <Row id="" className="justify-content-center" style={{}}>
-                    <button type="button" className="btn btn-secondary submit-btn-sign-up-login"> Login </button>
+                    <button type="button" className="btn btn-secondary submit-btn-sign-up-login" onClick={() => {window.location.href='/chats'}}> Login </button>
                 </Row>
             </form>
         </Row>
