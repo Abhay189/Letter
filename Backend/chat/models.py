@@ -3,6 +3,7 @@
 from django.db import models
 
 class User(models.Model):
+    user_id = models.AutoField(primary_key=True)
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
     phone_num = models.CharField(max_length=20,unique=True)
@@ -46,6 +47,7 @@ class UserContact(models.Model):
 
 
 class Conversation(models.Model):
+    conversation_id = models.AutoField(primary_key=True)
     conversation_name = models.CharField(max_length=150,blank=True)
     creator = models.ForeignKey(User,related_name='created_conversations',on_delete=models.CASCADE)
     creation_date = models.DateField(auto_now_add=True)
@@ -57,6 +59,7 @@ class Conversation(models.Model):
     
 
 class Message(models.Model):
+    message_id = models.AutoField(primary_key=True)
     sender = models.ForeignKey(User,related_name="sent_messages",on_delete=models.CASCADE)
     conversation = models.ForeignKey(Conversation,related_name="messages",on_delete=models.CASCADE)
     date_time = models.DateTimeField(auto_now_add=True)

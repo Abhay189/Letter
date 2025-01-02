@@ -1,3 +1,4 @@
 
 migrations/
 myenv/
+__pycache__/

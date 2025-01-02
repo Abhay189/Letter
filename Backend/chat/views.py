@@ -1,6 +1,6 @@
 # chat/views.py
-from django.shortcuts import render
 from rest_framework.response import Response
+from rest_framework.decorators import api_view
 from rest_framework.views import APIView
 from rest_framework import status
 from .models import User,UserContact
@@ -8,48 +8,29 @@ from .serializers import UserSerializer , UserContactsSerializer , ContactsSeria
 import bcrypt
 
 
+@api_view(['POST'])
+def user_login(request):
+    email = request.data.get('email', "")
+    password = request.data.get("password", "")
 
-def index(request):
-    return render(request, "chat/index.html")
+    if not email:
+        return Response({'error': 'Please provide an email address'}, status=status.HTTP_400_BAD_REQUEST)
+    if not password:
+        return Response({"error": "No password provided"}, status=status.HTTP_400_BAD_REQUEST)
 
-def room(request, room_name):
-    return render(request, "chat/room.html", {"room_name": room_name})
+    try:
+        user_profile = User.objects.get(email=email)
 
-def login(request):
-    return render(request, "chat/login.html")
-
-
-#define an api for logging in the user 
-
-#define a class that handles the actuall login and sighup. 
-
-# Userlogin should accept a post request and return the user profile in case the login is successfull. 
-class UserLogin(APIView):
-    def post(self,request):
-        email = request.data.get('email',"")
-        phone_num = request.data.get('phone_num', "")
-        password = request.data.get("password" , "")
-
-        if not (email or phone_num):
-            return Response({'error' : 'Please provide atleast email or phone number'} , status=status.HTTP_404_NOT_FOUND)
-        if not password:
-            return Response({"error": "No password provided"} , status=status.HTTP_400_BAD_REQUEST)
-
-        if email:
-            user_profile = User.objects.get(email = email)
-        elif phone_num:
-            user_profile = User.objects.get(phone_num =phone_num)
-        
-        if not user_profile:
-            return Response({"error":"No User found with the currect credentials"},status=status.HTTP_404_NOT_FOUND)
-    
         if bcrypt.checkpw(password.encode('utf-8'), user_profile.password.encode('utf-8')):
             curr_user_serializer = UserSerializer(user_profile)
             return_data = curr_user_serializer.data
-            return_data.pop('password')
-            return Response(return_data,status=status.HTTP_200_OK)
+            return_data.pop('password')  # Exclude password from the response
+            return Response(return_data, status=status.HTTP_200_OK)
 
-        return Response({'error':'Incorrect Password'},status=status.HTTP_404_NOT_FOUND)
+        return Response({'error': 'Incorrect password'}, status=status.HTTP_401_UNAUTHORIZED)
+
+    except User.DoesNotExist:
+        return Response({"error": "No user found with the provided email"}, status=status.HTTP_404_NOT_FOUND)
     
 class UserSignup(APIView):
     # This api will help the user in signing up with an account. 
