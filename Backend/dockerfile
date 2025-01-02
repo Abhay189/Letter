@@ -1,0 +1,24 @@
+# Backend Dockerfile
+FROM python:3.12.6-slim
+
+# Set working directory inside the container
+WORKDIR /app
+
+# Install dependencies for Python build and virtual environment
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    pkg-config \
+    default-libmysqlclient-dev \
+    && apt-get clean
+
+
+# Activate the virtual environment and install requirements
+COPY py-requirements.txt .
+RUN pip install --upgrade pip && \
+    pip install -r py-requirements.txt
+
+# Expose the Django development server port
+EXPOSE 8000
+
+# Command to run the development server inside the virtual environment
+CMD ["sh", "-c", "python3 manage.py runserver 0.0.0.0:8000"]

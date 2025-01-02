@@ -10,5 +10,17 @@ services:
     volumes:
       - mysql-data:/var/lib/mysql  # Map a named volume to persist data
 
+  backend:
+    build:
+      context: ./Backend  # Path to the backend Dockerfile
+    ports:
+      - "8000:8000"
+    depends_on:
+      - mysql  # Start MySQL first
+    volumes:
+      - ./Backend:/app  # Bind mount for live development
+
+
+
 volumes:
   mysql-data:

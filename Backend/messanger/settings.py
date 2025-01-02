@@ -1,4 +1,5 @@
 from pathlib import Path
+import os
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -54,7 +55,7 @@ DATABASES = {
         'NAME': 'letter_db',
         'USER': 'root',
         'PASSWORD': 'abhay532',
-        'HOST': '127.0.0.1',  # Or your MySQL server host
+        'HOST': os.getenv('DATABASE_HOST', 'mysql'),
         'PORT': '3306',       # Default MySQL port
     }
 }
