@@ -1,3 +1,6 @@
+import { _get, _post, _put, _delete } from '../apiClient';
+
+
 export interface PersonalProfileDetails {
     firstName: string;
     lastName: string;
@@ -37,15 +40,23 @@ export function userSignUp(firstName: string, lastName: string, phoneNum: string
     return userSignUpWasSuccessful;
 }
 
-export function userLogin(): boolean {
-    //will make http request using axios to get contact details, values will be hardcoded for now
-    //returns whether the user loging attempt was successfull or not
-    const personalProfileCredentials: PersonalProfileCredentials = {
-        phoneNum: "999-999-9999",
-        email:"whyamiupatthreeinthemorningcodingthis@gmail.com",
-        password:"1234icantthinkofanything"
-    };
-    //make http post request to send personalProfileCredentials to server and see if they are correct
-    const userLoginWasSuccessful = true;
-    return userLoginWasSuccessful;
+export async function userLogin(email: string, phoneNum: string, password: string) {
+    const response = await _post('/api/login', {
+        email: email,
+        phone_num: phoneNum,
+        password: password
+    });
+    return response.data; // Store the received data
 }
+// export function userLogin(): boolean {
+//     //will make http request using axios to get contact details, values will be hardcoded for now
+//     //returns whether the user loging attempt was successfull or not
+//     const personalProfileCredentials: PersonalProfileCredentials = {
+//         phoneNum: "999-999-9999",
+//         email:"whyamiupatthreeinthemorningcodingthis@gmail.com",
+//         password:"1234icantthinkofanything"
+//     };
+//     //make http post request to send personalProfileCredentials to server and see if they are correct
+//     const userLoginWasSuccessful = true;
+//     return userLoginWasSuccessful;
+// }

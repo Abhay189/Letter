@@ -7,6 +7,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+#CORS_ALLOW_HEADERS = "access-control-allow-origin" #also for developmentas the frontend is typically run as http://localhost and this is needed to allow local host to connect to the web server
+
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -14,6 +16,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'corsheaders', #for development as the frontend is typically run as http://localhost and this is needed to allow local host to connect to the web server
     'messanger',  # Add this
     'chat',       # Add this
 ]
@@ -21,7 +24,8 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',  # Must come before AuthenticationMiddleware
-    'django.middleware.common.CommonMiddleware',
+    'corsheaders.middleware.CorsMiddleware',# for development as frontend runs as http://localhost t and this is needed to allow local host to connect to the web server. Must come before CommonMiddleware
+    'django.middleware.common.CommonMiddleware', 
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
@@ -82,3 +86,5 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+CORS_ALLOW_ALL_ORIGINS = True #for development as the frontend is typically run as http://localhost and this needed to allow for all different port numbers

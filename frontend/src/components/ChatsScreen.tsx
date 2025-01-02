@@ -15,7 +15,7 @@ import Column from './Column';
 import ChatHistory from './ChatHistory';
 
 function ChatsScreen() {
-    const [[contactDetailsOfAllContacts, contactDetailsById], _] = useState(contact_details.getContactDetailsOfAllContacts());
+    const [[contactDetailsOfAllContacts, contactDetailsById], _] = useState(contact_details.getContactDetailsOfAllContacts("1")); //TODO currently supplies user id of "1" as input always but this should be changed in the future to supply userid of current user 
     const [contactDetailsOfOpenChats, setContactDetailsOfOpenChats] = useState(contact_details.getContactDetailsOfOpenChats(contactDetailsOfAllContacts));
     const [selectedChatContactId, setSelectedChatContactId] = useState(0);
     const [personalProfileDetails, setPersonalProfileDetails] = useState(personal_profile_details.getPersonalProfileDetails());
