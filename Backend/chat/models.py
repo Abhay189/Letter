@@ -33,7 +33,6 @@ class User(models.Model):
         return f"{self.first_name} {self.last_name} {self.email}"
 
 
-
 class UserContact(models.Model):
     user = models.ForeignKey(User, related_name='user_contacts', on_delete=models.CASCADE)
     contact = models.ForeignKey(User, related_name='contact_users', on_delete=models.CASCADE)

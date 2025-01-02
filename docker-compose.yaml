@@ -20,7 +20,5 @@ services:
     volumes:
       - ./Backend:/app  # Bind mount for live development
 
-
-
 volumes:
   mysql-data:

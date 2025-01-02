@@ -9,7 +9,7 @@ import bcrypt
 
 
 @api_view(['POST'])
-def user_login(request):
+def login(request):
     email = request.data.get('email', "")
     password = request.data.get("password", "")
 
@@ -32,36 +32,39 @@ def user_login(request):
     except User.DoesNotExist:
         return Response({"error": "No user found with the provided email"}, status=status.HTTP_404_NOT_FOUND)
     
-class UserSignup(APIView):
-    # This api will help the user in signing up with an account. 
-    def post(self,request):
-        first_name = request.data.get('first_name', "")
-        last_name = request.data.get('last_name', "")
-        phone_num = request.data.get('phone_num', "")
-        email = request.data.get('email', "")
-        password = request.data.get('password', "")
 
-        if not (first_name,last_name,email,password,phone_num):
-            return Response({"error":"You must provide a value for First name, last name, email, phone number and password"},status=status.HTTP_400_BAD_REQUEST)
+@api_view(['POST'])
+def register(request):
+    first_name = request.data.get('first_name', "")
+    last_name = request.data.get('last_name', "")
+    phone_num = request.data.get('phone_num', "")
+    email = request.data.get('email', "")
+    password = request.data.get('password', "")
 
-        hashed_password = bcrypt.hashpw(password.encode('utf-8'),bcrypt.gensalt()).decode('utf-8')
+    if not (first_name and last_name and email and password and phone_num):
+        return Response(
+            {"error": "You must provide values for first name, last name, email, phone number, and password"},
+            status=status.HTTP_400_BAD_REQUEST
+        )
 
-        new_user_data = {
-            "first_name" : first_name,
-            "last_name" : last_name,
-            "phone_num" : phone_num,
-            "email" : email,
-            "password" : hashed_password
-        }
+    hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
 
-        curr_user_serializer = UserSerializer(data=new_user_data)
+    new_user_data = {
+        "first_name": first_name,
+        "last_name": last_name,
+        "phone_num": phone_num,
+        "email": email,
+        "password": hashed_password
+    }
 
-        if curr_user_serializer.is_valid():
-            curr_user_serializer.save()
-            new_user_data.pop('password')
-            return Response(new_user_data)
+    curr_user_serializer = UserSerializer(data=new_user_data)
+    if curr_user_serializer.is_valid():
+        curr_user_serializer.save()
+        new_user_data.pop('password')
+        return Response(new_user_data, status=status.HTTP_201_CREATED)
 
-        return Response(curr_user_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    return Response(curr_user_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
      
 #Define views for the user to connect with their contacts: 
 # Views to get all connections for the current User
