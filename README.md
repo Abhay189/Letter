@@ -4,8 +4,8 @@
 
 Built with a **Django** backend and **React** frontend, Letter offers an API-driven architecture that can easily be expanded to include features like real-time messaging, group chats, and more. This web-based application ensures a smooth, secure, and scalable communication experience for users, providing everything needed for efficient, real-time interaction without the hassle of local data storage.
 
-![App Screenshot 1](./Assets/chats%20screen.png)
-![App Screenshot 2](./Assets/Signup%20page.png)
+![App Screenshot 1](./Assets/Signup%20page.png)
+![App Screenshot 2](./Assets/chats%20screen.png)
 
 ## Project Structure
 
