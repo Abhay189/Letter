@@ -25,8 +25,8 @@
 
 | **Endpoint** | **Method** | **Description**                   | **Input**         | **Output**               |
 |--------------|------------|-----------------------------------|-------------------|--------------------------|
-| `/profile`   | GET        | Retrieve the current user's profile. | None              | User profile data (`200 OK`). |
-| `/profile`   | PUT        | Update the current user's profile. | Fields to update. | Success: `200 OK`.        |
+| `/profile`   | GET        | Retrieve the current user's profile. | Query Parameter: `user_id` (required)  | User profile data (`200 OK`). |
+| `/profile`   | PUT        | Update the current user's profile. | `user_id` (required), Fields to update (`first_name`, `last_name`, `phone_num`, etc.) | Success: `200 OK`.        |
 
 ---
 
@@ -34,10 +34,10 @@
 
 | **Endpoint**            | **Method** | **Description**                           | **Input**               | **Output**               |
 |--------------------------|------------|-------------------------------------------|-------------------------|--------------------------|
-| `/contacts`             | GET        | Get a list of all the user's contacts.    | None                    | List of contacts (`200 OK`). |
-| `/contacts`             | POST       | Add a new contact to the user's list.     | `contact_name`, `phone_num` | Success: `201 Created`. |
+| `/contacts`             | GET        | Get a list of all the user's contacts.    | `user_id`                    | List of contacts (`200 OK`). |
+| `/contacts`             | POST       | Add a new contact to the user's list.     | `user_id`, `contact_name`, `phone_num` | Success: `201 Created`. |
 | `/contacts/<contact_id>`| PUT        | Update details of a specific contact.     | Fields to update.       | Success: `200 OK`.       |
-| `/contacts/<contact_id>`| DELETE     | Delete a specific contact.                | None                    | Success: `204 No Content`. |
+| `/contacts/<contact_id>`| DELETE     | Delete a specific contact.                | `user_id`, `contact_id`   | Success: `204 No Content`. |
 
 ---
 
