@@ -4,7 +4,7 @@ from rest_framework.decorators import api_view
 from rest_framework.views import APIView
 from rest_framework import status
 from .models import User,UserContact
-from .serializers import UserSerializer , UserContactsSerializer , ContactsSerializer
+from .serializers import UserSerializer  , ContactsSerializer , UserContactSerializer
 import bcrypt
 
 
@@ -65,83 +65,116 @@ def register(request):
 
     return Response(curr_user_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-     
-#Define views for the user to connect with their contacts: 
-# Views to get all connections for the current User
-# Views to add a new connection to the current User 
-# Views to delete a connection from the user contact list 
 
-class UserContact(APIView):
-    #The endpoint to get all connections for a particular user
-    def get(self,request):
-        user_id = request.data.get('id',"")
+class Profile(APIView):
+    def get(self, request):
+        """
+        Retrieve the current user's profile based on their user ID.
+        """
+        user_id = request.query_params.get('user_id', None)
 
         if not user_id:
-            return Response({"error":"A User ID is required to get contact list"}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"error": "User ID is required."}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            user = User.objects.get(user_id=user_id)
+            serializer = UserSerializer(user)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except User.DoesNotExist:
+            return Response({"error": "User not found."}, status=status.HTTP_404_NOT_FOUND)
+
+    def put(self, request):
+        """
+        Update the current user's profile.
+        """
+        user_id = request.data.get('user_id', None)
+
+        if not user_id:
+            return Response({"error": "User ID is required."}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            user = User.objects.get(user_id=user_id)
+            serializer = UserSerializer(user, data=request.data, partial=True)
+
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        except User.DoesNotExist:
+            return Response({"error": "User not found."}, status=status.HTTP_404_NOT_FOUND)
+     
+class ContactList(APIView):
+    """
+    List all contacts for a specific user and add a new contact.
+    """
+    def get(self, request):
+        """
+        Get a list of all the user's contacts based on user_id.
+        """
+        user_id = request.query_params.get('user_id', None)
+
+        if not user_id:
+            return Response({"error": "User ID is required."}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            user = User.objects.get(user_id=user_id)  # Fetch the user by user_id
+            contacts = user.get_contact_names_and_phone_num()  # Get contacts using the custom method
+            return Response(contacts, status=status.HTTP_200_OK)
+        except User.DoesNotExist:
+            return Response({"error": "User not found."}, status=status.HTTP_404_NOT_FOUND)
+
+    def post(self, request):
+        """
+        Add a new contact to the user's list.
+        """
+        user_id = request.data.get('user_id')
+        contact_name = request.data.get('contact_name')
+        phone_num = request.data.get('phone_num')
+        email = request.data.get('email')  # Optional email
+
+        if not (contact_name and phone_num and user_id):
+            return Response({"error": "Contact name, phone number, and user ID are required."}, status=status.HTTP_400_BAD_REQUEST)
         
+        # Ensure user_id is an integer
         try:
             user_id = int(user_id)
-            user_object = User.objects.get(id=user_id)
         except ValueError:
-            return Response({"error":"Invalid User ID, ID Needs to be an integer"}, status=status.HTTP_400_BAD_REQUEST)
-        except User.DoesNotExist:
-            return Response({"error":"Invalid User ID, No such ID exists"}, status=status.HTTP_400_BAD_REQUEST)
-        
-        contact_list = user_object.get_contact_names_and_id()
-        
-        return Response(contact_list)
-    
-    def post(self,request):
-        user_id =  request.data.get("id")
-        contact_name = request.data.get("contact_name")
-        contact_phone_num = request.data.get("contact_phone_num")
-
-        if not (user_id and contact_name and contact_phone_num):
-            return Response({"error": "Invalid Data provided"} , status=status.HTTP_400_BAD_REQUEST)
-        
-        try:
-            User.objects.get(id=user_id)
-        except User.DoesNotExist:
-            return Response({"error":f"Invalid User ID"}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"error": "Invalid user ID."}, status=status.HTTP_400_BAD_REQUEST)
 
         try:
-            contact_obj = User.objects.get(phone_num=contact_phone_num)
-            contact_id = contact_obj.id
+            # Fetch the user by user_id
+            user = User.objects.get(user_id=user_id)
         except User.DoesNotExist:
-            return Response({"error":f"User with phone numer {contact_phone_num} does not exist"}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"error": "User not found."}, status=status.HTTP_404_NOT_FOUND)
 
-        contact_data = {
-            "user" : user_id,
-            "contact" : contact_id,
-            "contact_name" : contact_name
+        # Fetch the contact user by phone number
+        try:
+            contact_user = User.objects.get(phone_num=phone_num)
+        except User.DoesNotExist:
+            return Response({"error": "Contact with provided phone number not found."}, status=status.HTTP_404_NOT_FOUND)
+
+        # Ensure the user is not trying to add themselves as a contact
+        if user == contact_user:
+            return Response({"error": "You cannot add yourself as a contact."}, status=status.HTTP_400_BAD_REQUEST)
+        
+        # Check if the contact already exists in the user's contact list
+        if UserContact.objects.filter(user=user, contact=contact_user).exists():
+            return Response({"error": "Contact already exists in the user's contact list."}, status=status.HTTP_400_BAD_REQUEST)
+
+
+        # Prepare the data for the serializer
+        data = {
+            'user': user_id,
+            'contact': contact_user.user_id,
+            'contact_name': contact_name
         }
 
-        contact_obj = ContactsSerializer(data=contact_data)
+        # Add the user ID to the serializer's context
+        serializer = UserContactSerializer(data=data, context={'user_id': user_id})
 
-        if contact_obj.is_valid():
-            contact_obj.save()
-            return Response({"success": "Contact added successfully"}, status=status.HTTP_201_CREATED)
-    
-        return Response(contact_obj.errors, status=status.HTTP_400_BAD_REQUEST)
-    
-    def delete(self,request):
-        user_id =  request.data.get("id")
-        contact_phone_num = request.data.get("contact_phone_num")
+        if serializer.is_valid():
+            # Save the new contact
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
 
-        if not (user_id  and contact_phone_num):
-            return Response({"error": "Invalid Data provided"} , status=status.HTTP_400_BAD_REQUEST)
-        
-        try:
-            user_obj = User.objects.get(id=user_id)
-        except User.DoesNotExist:
-            return Response({"error":f"Invalid User ID"}, status=status.HTTP_400_BAD_REQUEST)
-
-        try:
-            contact_obj = User.objects.get(phone_num=contact_phone_num)
-        except User.DoesNotExist:
-            return Response({"error":f"User with phone numer {contact_phone_num} does not exist"}, status=status.HTTP_400_BAD_REQUEST)
-
-        user_obj.contacts.remove(contact_obj)
-
-        return Response({"success": "Contact deleted successfully"}, status=status.HTTP_200_OK)
-        
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

@@ -10,10 +10,11 @@ class UserSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class UserContactsSerializer(serializers.ModelSerializer):
+class UserContactSerializer(serializers.ModelSerializer):
+    # The user and contact fields will be populated by the view, so we can exclude them from input
     class Meta:
-        model = User
-        fields = ['id','first_name', 'last_name']
+        model = UserContact
+        fields = ['user', 'contact', 'contact_name']
         
 
 

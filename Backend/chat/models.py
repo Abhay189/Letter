@@ -18,13 +18,14 @@ class User(models.Model):
         blank=True  # Allow the field to be optional
     )
     
-    def get_contact_names_and_id(self):
-        contacts = UserContact.objects.filter(user=self).values_list('contact_name','contact')
+    def get_contact_names_and_phone_num(self):
+        contacts = UserContact.objects.filter(user=self)
         return_contact = []
         for contact in contacts:
+            contact_user = contact.contact
             return_contact.append({
-                "contact_name":contact[0],
-                "contact_id":contact[1]
+                "contact_name":contact.contact_name,
+                "contact_phone_num":contact_user.phone_num
             })
 
         return return_contact
