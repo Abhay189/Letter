@@ -178,3 +178,58 @@ class ContactList(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+
+    def put(self, request):
+        """
+        Update details of a specific contact.
+        """
+        user_id = request.data.get('user_id')
+        contact_phone = request.data.get('phone_num')
+
+        if not (user_id and contact_phone):
+            return Response({"error": "Both user_id and contact_phone are required."}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            user = User.objects.get(user_id=user_id)
+            contact = User.objects.get(phone_num=contact_phone)
+
+            # Check if the contact exists in the user's contact list
+            user_contact = UserContact.objects.get(user=user, contact=contact)
+        except User.DoesNotExist:
+            return Response({"error": "User not found."}, status=status.HTTP_404_NOT_FOUND)
+        except UserContact.DoesNotExist:
+            return Response({"error": "Contact not found in user's contact list."}, status=status.HTTP_404_NOT_FOUND)
+        
+        # Update the contact details
+        serializer = UserContactSerializer(user_contact, data=request.data, partial=True)  # `partial=True` allows updating specific fields
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request):
+        """
+        Delete a specific contact.
+        """
+        user_id = request.data.get('user_id')
+        contact_phone = request.data.get('phone_num')
+
+        if not (user_id and contact_phone):
+            return Response({"error": "Both user_id and contact_phone are required."}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            user = User.objects.get(user_id=user_id)
+            contact = User.objects.get(phone_num=contact_phone)
+
+            # Check if the contact exists in the user's contact list
+            user_contact = UserContact.objects.get(user=user, contact=contact)
+        except User.DoesNotExist:
+            return Response({"error": "User not found."}, status=status.HTTP_404_NOT_FOUND)
+        except UserContact.DoesNotExist:
+            return Response({"error": "Contact not found in user's contact list."}, status=status.HTTP_404_NOT_FOUND)
+
+        # Delete the contact
+        user_contact.delete()
+        return Response({"message": "Contact deleted successfully."}, status=status.HTTP_204_NO_CONTENT)

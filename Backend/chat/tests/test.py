@@ -351,3 +351,81 @@ class ContactListTests(TestCase):
         
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(response.data["error"], "Contact already exists in the user's contact list.")
+
+class ContactDetailTestCase(TestCase):
+
+    def setUp(self):
+        # Create a test user and a contact
+        self.user = User.objects.create(user_id=1, first_name="John", last_name="Doe", email="john@example.com", phone_num="1234567890")
+        self.contact = User.objects.create(user_id=2, first_name="Jane", last_name="Smith", email="jane@example.com", phone_num="9876543210")
+
+        # Create a UserContact
+        self.user_contact = UserContact.objects.create(user=self.user, contact=self.contact, contact_name="Jane Smith")
+
+        # Define endpoints
+        self.put_url = "/api/contacts/"
+        self.delete_url = "/api/contacts/"
+
+    def test_put_update_contact_name_success(self):
+        data = {
+            "user_id": self.user.user_id,
+            "phone_num": self.contact.phone_num,
+            "contact_name": "Updated Name"
+        }
+
+        response = self.client.put(self.put_url, data, format="json", content_type="application/json")
+        print(response)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["contact_name"], "Updated Name")
+
+    def test_put_update_contact_name_invalid_user(self):
+        data = {
+            "user_id": 999,  # Non-existent user
+            "phone_num": self.contact.phone_num,
+            "contact_name": "Updated Name"
+        }
+
+        response = self.client.put(self.put_url, data, format="json", content_type="application/json")
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(response.data["error"], "User not found.")
+
+    def test_put_update_contact_name_invalid_contact(self):
+        data = {
+            "user_id": self.user.user_id,
+            "phone_num": "0000000000",  # Non-existent phone number
+            "contact_name": "Updated Name"
+        }
+
+        response = self.client.put(self.put_url, data, format="json", content_type="application/json")
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(response.data["error"], "Contact not found in user's contact list.")
+
+    def test_delete_contact_success(self):
+        data = {
+            "user_id": self.user.user_id,
+            "phone_num": self.contact.phone_num
+        }
+
+        response = self.client.delete(self.delete_url, data, format="json", content_type="application/json")
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertFalse(UserContact.objects.filter(user=self.user, contact=self.contact).exists())
+
+    def test_delete_contact_invalid_user(self):
+        data = {
+            "user_id": 999,  # Non-existent user
+            "phone_num": self.contact.phone_num
+        }
+
+        response = self.client.delete(self.delete_url, data, format="json", content_type="application/json")
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(response.data["error"], "User not found.")
+
+    def test_delete_contact_invalid_contact(self):
+        data = {
+            "user_id": self.user.user_id,
+            "phone_num": "0000000000"  # Non-existent phone number
+        }
+
+        response = self.client.delete(self.delete_url, data, format="json", content_type="application/json")
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(response.data["error"], "Contact not found in user's contact list.")
