@@ -1,0 +1,25 @@
+trigger:
+- main  # Trigger on commits to the main branch
+
+variables:
+  containerRegistry: "letterregistry.azurecr.io"  # Replace with your ACR name
+  imageTag: "$(Build.BuildId)"  # Unique tag for each build
+
+stages:
+- stage: BuildAndPush
+  displayName: Build and Push Backend Image
+  jobs:
+  - job: BuildAndPushImage
+    displayName: Build and Push Docker Image to ACR
+    pool:
+      vmImage: 'ubuntu-latest'
+    steps:
+    - task: DockerInstaller@0
+      displayName: Install Docker
+
+    - script: |
+        docker build -t letter_backend ./Backend
+        docker tag letter_backend $(containerRegistry)/letter_backend:$(imageTag)
+        echo $(DOCKER_PASSWORD) | docker login $(containerRegistry) -u $(DOCKER_USERNAME) --password-stdin
+        docker push $(containerRegistry)/letter_backend:$(imageTag)
+      displayName: Build and Push Docker Image to ACR
