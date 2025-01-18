@@ -17,6 +17,9 @@ COPY py-requirements.txt .
 RUN pip install --upgrade pip && \
     pip install -r py-requirements.txt
 
+# Copy the entire backend project into the container
+COPY . .
+
 # Expose the Django development server port
 EXPOSE 8000
 
