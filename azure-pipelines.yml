@@ -44,7 +44,7 @@ stages:
         docker run -d --name backend_test -p 8000:8000 $(containerRegistry)/letter_backend:$(imageTag)
 
         echo "Running Django tests..."
-        docker exec backend_test python manage.py test chat.tests.test || { docker logs backend_test; docker stop backend_test; docker rm backend_test; exit 1; }
+        docker exec backend_test python ./Backend/manage.py test chat.tests.test || { docker logs backend_test; docker stop backend_test; docker rm backend_test; exit 1; }
 
         echo "Stopping and cleaning up..."
         docker stop backend_test
