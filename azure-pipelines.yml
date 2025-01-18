@@ -2,10 +2,11 @@ trigger:
 - main  # Trigger on commits to the main branch
 
 variables:
-  containerRegistry: "letterregistry.azurecr.io"  # Replace with your ACR name
-  imageTag: "$(Build.BuildId)"  # Unique tag for each build
-- group: letter-backend-variable-group
-
+- group: letter-backend-variable-group  # Reference your variable group
+- name: containerRegistry
+  value: "letterregistry.azurecr.io"  # Replace with your ACR name
+- name: imageTag
+  value: "$(Build.BuildId)"  # Unique tag for each build
 
 stages:
 - stage: BuildAndPush
