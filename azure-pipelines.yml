@@ -12,7 +12,7 @@ stages:
   - job: BuildAndPushImage
     displayName: Build and Push Docker Image to ACR
     pool:
-      vmImage: 'ubuntu-latest'
+      name: EC2-Agents
     steps:
     - task: DockerInstaller@0
       displayName: Install Docker
