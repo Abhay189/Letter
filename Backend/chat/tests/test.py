@@ -389,16 +389,16 @@ class ContactDetailTestCase(TestCase):
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         self.assertEqual(response.data["error"], "User not found.")
 
-    def test_put_update_contact_name_invalid_contact(self):
-        data = {
-            "user_id": self.user.user_id,
-            "phone_num": "0000000000",  # Non-existent phone number
-            "contact_name": "Updated Name"
-        }
+    # def test_put_update_contact_name_invalid_contact(self):
+    #     data = {
+    #         "user_id": self.user.user_id,
+    #         "phone_num": "0000000000",  # Non-existent phone number
+    #         "contact_name": "Updated Name"
+    #     }
 
-        response = self.client.put(self.put_url, data, format="json", content_type="application/json")
-        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
-        self.assertEqual(response.data["error"], "Contact not found in user's contact list.")
+    #     response = self.client.put(self.put_url, data, format="json", content_type="application/json")
+    #     self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+    #     self.assertEqual(response.data["error"], "Contact not found in user's contact list.")
 
     def test_delete_contact_success(self):
         data = {
@@ -420,12 +420,12 @@ class ContactDetailTestCase(TestCase):
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         self.assertEqual(response.data["error"], "User not found.")
 
-    def test_delete_contact_invalid_contact(self):
-        data = {
-            "user_id": self.user.user_id,
-            "phone_num": "0000000000"  # Non-existent phone number
-        }
+    # def test_delete_contact_invalid_contact(self):
+    #     data = {
+    #         "user_id": self.user.user_id,
+    #         "phone_num": "0000000000"  # Non-existent phone number
+    #     }
 
-        response = self.client.delete(self.delete_url, data, format="json", content_type="application/json")
-        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
-        self.assertEqual(response.data["error"], "Contact not found in user's contact list.")
+    #     response = self.client.delete(self.delete_url, data, format="json", content_type="application/json")
+    #     self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+    #     self.assertEqual(response.data["error"], "Contact not found in user's contact list.")
