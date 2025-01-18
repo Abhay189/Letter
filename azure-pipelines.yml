@@ -41,7 +41,7 @@ stages:
 
     - script: |
         echo "Starting the backend container..."
-        docker run -d --name backend_test -p 8000:8000 $(containerRegistry)/letter_backend:$(imageTag)
+        docker run -d --name backend_test -p 8000:8000 -e USE_SQLITE_FOR_TESTS=true $(containerRegistry)/letter_backend:$(imageTag)
 
         echo "Running Django tests..."
         docker exec backend_test python ./Backend/manage.py test chat.tests.test || { docker logs backend_test; docker stop backend_test; docker rm backend_test; exit 1; }
