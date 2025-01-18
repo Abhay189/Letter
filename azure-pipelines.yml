@@ -1,19 +1,19 @@
 trigger:
-- main  # Trigger on commits to the main branch
+- main  
 
 variables:
-- group: letter-backend-variable-group  # Reference your variable group
+- group: letter-backend-variable-group 
 - name: containerRegistry
-  value: "letterregistry.azurecr.io"  # Replace with your ACR name
+  value: "letterregistry.azurecr.io"  
 - name: imageTag
-  value: "$(Build.BuildId)"  # Unique tag for each build
+  value: "$(Build.BuildId)" 
 
 stages:
-- stage: BuildAndPush
-  displayName: Build and Push Backend Image
+- stage: Build
+  displayName: Build Backend Image
   jobs:
-  - job: BuildAndPushImage
-    displayName: Build and Push Docker Image to ACR
+  - job: BuildBackend
+    displayName: Build Backend Docker Image
     pool:
       name: EC2-Agents
     steps:
@@ -21,8 +21,32 @@ stages:
       displayName: Install Docker
 
     - script: |
+        echo "Building Docker image..."
         docker build -t letter_backend ./Backend
         docker tag letter_backend $(containerRegistry)/letter_backend:$(imageTag)
-        echo $(DOCKER_PASSWORD) | docker login $(containerRegistry) -u $(DOCKER_USERNAME) --password-stdin
-        docker push $(containerRegistry)/letter_backend:$(imageTag)
-      displayName: Build and Push Docker Image to ACR
+      displayName: Build Docker Image
+
+
+- stage: Test
+  displayName: Test Backend Image
+  dependsOn: Build
+  jobs:
+  - job: TestAPI
+    displayName: Run API Tests
+    pool:
+      name: EC2-Agents
+    steps:
+    - task: DockerInstaller@0
+      displayName: Install Docker
+
+    - script: |
+        echo "Starting the backend container..."
+        docker run -d --name backend_test -p 8000:8000 $(containerRegistry)/letter_backend:$(imageTag)
+
+        echo "Running Django tests..."
+        docker exec backend_test python manage.py test chat.tests.test || { docker logs backend_test; docker stop backend_test; docker rm backend_test; exit 1; }
+
+        echo "Stopping and cleaning up..."
+        docker stop backend_test
+        docker rm backend_test
+      displayName: Run Django Test Cases
