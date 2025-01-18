@@ -4,8 +4,8 @@ trigger:
 variables:
   containerRegistry: "letterregistry.azurecr.io"  # Replace with your ACR name
   imageTag: "$(Build.BuildId)"  # Unique tag for each build
-  
 - group: letter-backend-variable-group
+
 
 stages:
 - stage: BuildAndPush
