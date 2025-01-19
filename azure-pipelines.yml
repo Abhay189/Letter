@@ -50,3 +50,28 @@ stages:
         docker stop backend_test
         docker rm backend_test
       displayName: Run Django Test Cases
+
+- stage: Deploy
+  displayName: Deploy Backend Container to ACR
+  dependsOn: Test
+  condition: succeeded()  # Run only if the Test stage succeeds
+  jobs:
+  - job: PushToACR
+    displayName: Push Docker Image to ACR with Latest Tag
+    pool:
+      name: EC2-Agents
+    steps:
+    - task: DockerInstaller@0
+      displayName: Install Docker
+
+    - script: |
+        echo "Logging in to ACR..."
+        echo $(DOCKER_PASSWORD) | docker login $(containerRegistry) -u $(DOCKER_USERNAME) --password-stdin
+
+        echo "Tagging the image with the latest tag..."
+        docker tag $(containerRegistry)/letter_backend:$(imageTag) $(containerRegistry)/letter_backend:latest
+
+        echo "Pushing the Docker image with both tags (Build ID and latest)..."
+        docker push $(containerRegistry)/letter_backend:$(imageTag)
+        docker push $(containerRegistry)/letter_backend:latest
+      displayName: Push Docker Image
