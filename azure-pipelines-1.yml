@@ -1,0 +1,20 @@
+
+
+trigger: 
+- main
+
+variables:
+  envVariable: this is your vaiable 
+
+pool: 
+  name: EC2-Agents
+
+stages:
+- stage: Hello
+  jobs:
+    - job: Hello-job
+      steps:
+        - script: echo "hello Azure Devops!"
+
+
+
