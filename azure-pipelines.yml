@@ -1,7 +1,6 @@
 name: 'CD/CI Pipeline'
 
-trigger:
-- main  
+trigger: none
 
 variables:
 - group: letter-backend-variable-group 
