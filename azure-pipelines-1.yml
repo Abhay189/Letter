@@ -5,16 +5,36 @@ trigger:
 
 variables:
   userName: Abhay 
+  githubRegistry : https://github.com/Abhay189/Letter.git
+  dockerImageName : letter-image
+  dockerImageTag : $(Build.BuildId)
 
 pool: 
   name: EC2-Agents
 
+#Build the backend. Get the docker image. 
+#Test the docker image with the testcases defined in django application 
+#Deploy the docker image to the ACR.
+
 stages:
-- stage: Hello
+- stage: ContainerBuild
   jobs:
-    - job: HelloJob
+    - job: Build 
       steps:
-        - script: echo "Hello there from $(userName)"
+        # Setup docker on the Linux machine. 
+        - task: DockerInstaller@0
+          displayName: Install Docker 
+
+        # Copy code registry to the linux server.
+        # Build image on the linux machine. 
+
+        - script: | 
+            pwd 
+            git clone $(githubRegistry)
+            docker build -t $(dockerImageName):$(dockerImageTag) ./Backend
+            docker images
+
+         
 
 
 
