@@ -54,7 +54,7 @@ stages:
 - stage: Deploy
   displayName: Deploy Backend Container to ACR
   dependsOn: Test
-  condition: succeeded()  # Run only if the Test stage succeeds
+  condition: succeeded()  
   jobs:
   - job: PushToACR
     displayName: Push Docker Image to ACR with Latest Tag
