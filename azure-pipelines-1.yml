@@ -41,7 +41,7 @@ stages:
 
 - stage: Testing 
   jobs:
-  - job: Testing API endpoints 
+  - job: Testing_API_Endpoints 
     steps:
     # Use the docker image that you just created to run the backend and use the django testcases to ensure the build is doing well. 
     # run the docker container 
