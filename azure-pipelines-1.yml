@@ -6,7 +6,8 @@ trigger:
 variables:
   userName: Abhay 
   githubRegistry : https://github.com/Abhay189/Letter.git
-  dockerImageName : letter-image
+  containerRegistryName : letterregistry.azurecr.io
+  dockerImageName : letter_backend
   dockerImageTag : $(Build.BuildId)
 
 pool: 
@@ -17,9 +18,9 @@ pool:
 #Deploy the docker image to the ACR.
 
 stages:
-- stage: ContainerBuild
+- stage: Build
   jobs:
-    - job: Build 
+    - job: Docker_Image_Build 
       steps:
         # Setup docker on the Linux machine. 
         - task: DockerInstaller@0
@@ -29,16 +30,39 @@ stages:
         # Build image on the linux machine. 
 
         - script: | 
-            pwd 
+            echo "Cloning Git repository into host environment"
             git clone $(githubRegistry)
-            echo "Cloning is done"
 
-            ls 
+            echo "Building docker image from the git repository"
+            docker build -t $(containerRegistryName)/$(dockerImageName):$(dockerImageTag) ./Backend
+          displayName: Building docker image
 
-            echo "\n\n\n\n"
-            docker build -t $(dockerImageName):$(dockerImageTag) ./Backend
-            
-            docker images
+# Testing stage 
+
+- stage: Testing 
+  jobs:
+  - job: Testing API endpoints 
+    steps:
+    # Use the docker image that you just created to run the backend and use the django testcases to ensure the build is doing well. 
+    # run the docker container 
+    # ssh into the docker container and run the testcases 
+    - script: |
+        echo "Spinning up docker container from previously created image"
+        docker run --name letter-backend-container -d -p 8000:8000 -e USE_SQLITE_FOR_TESTS=true $(containerRegistryName)/$(dockerImageName):$(dockerImageTag)
+        
+        echo "Executing django API Testcases"
+        docker exec letter-backend-container /bin/bash -c python manage.py test chat.tests.test
+
+        echo "Stopping docker container" 
+        docker stop letter-backend-container
+
+        echo "Deleting docker container"
+        docker rm letter-backend-container
+      displayName: Testing API Calls 
+
+
+
+
 
          
 
