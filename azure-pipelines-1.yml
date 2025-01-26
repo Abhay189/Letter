@@ -31,7 +31,13 @@ stages:
         - script: | 
             pwd 
             git clone $(githubRegistry)
+            echo "Cloning is done"
+
+            ls 
+
+            echo "\n\n\n\n"
             docker build -t $(dockerImageName):$(dockerImageTag) ./Backend
+            
             docker images
 
          
