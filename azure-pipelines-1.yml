@@ -1,34 +1,31 @@
-name: Test Pipeline
-
 trigger: 
 - main
 
 variables:
-  userName: Abhay 
-  githubRegistry : https://github.com/Abhay189/Letter.git
-  containerRegistryName : letterregistry.azurecr.io
-  dockerImageName : letter_backend
-  dockerImageTag : $(Build.BuildId)
+- name: githubRegistry
+  value: https://github.com/Abhay189/Letter.git
+
+- name: containerRegistryName
+  value: letterregistry.azurecr.io
+
+- name: dockerImageName
+  value: letter_backend
+
+- name: dockerImageTag
+  value: $(Build.BuildId)
+
+- group: letter-backend-variable-group 
 
 pool: 
   name: EC2-Agents
-
-#Build the backend. Get the docker image. 
-#Test the docker image with the testcases defined in django application 
-#Deploy the docker image to the ACR.
 
 stages:
 - stage: Build
   jobs:
     - job: Docker_Image_Build 
       steps:
-        # Setup docker on the Linux machine. 
         - task: DockerInstaller@0
           displayName: Install Docker 
-
-        # Copy code registry to the linux server.
-        # Build image on the linux machine. 
-
         - script: | 
             echo "Cloning Git repository into host environment"
             git clone $(githubRegistry)
@@ -38,14 +35,10 @@ stages:
           displayName: Building docker image
 
 # Testing stage 
-
 - stage: Testing 
   jobs:
   - job: Testing_API_Endpoints 
     steps:
-    # Use the docker image that you just created to run the backend and use the django testcases to ensure the build is doing well. 
-    # run the docker container 
-    # ssh into the docker container and run the testcases 
     - script: |
         echo "Spinning up docker container from previously created image"
         docker run --name letter-backend-container -p 8000:8000 -e USE_SQLITE_FOR_TESTS=true $(containerRegistryName)/$(dockerImageName):$(dockerImageTag)
@@ -60,6 +53,28 @@ stages:
         docker rm letter-backend-container
       displayName: Testing API Calls 
 
+
+- stage: Deploy
+  jobs:
+    - job: Deploy_Image_To_ACR
+      steps:
+      - script: | 
+          echo "Logging in to ACR..."
+          docker login $(containerRegistryName) -u $(DOCKER_USERNAME) -p $(DOCKER_PASSWORD)
+
+          echo "Pushing Docker image to ACR registry"
+          docker push $(containerRegistryName)/$(dockerImageName):$(dockerImageTag)
+
+          echo "Tagging Docker image with latest tag..."
+          docker tag $(containerRegistryName)/$(dockerImageName):$(dockerImageTag) $(containerRegistryName)/$(dockerImageName):latest
+
+          echo "Pushing Docker image latest to ACR registry"
+          docker push $(containerRegistryName)/$(dockerImageName):latest
+        displayName: Deploying Docker image to ACR 
+
+
+
+    
 
 
 
