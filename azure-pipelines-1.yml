@@ -4,7 +4,7 @@ trigger:
 - main
 
 variables:
-  envVariable: this is your vaiable 
+  userName: Abhay 
 
 pool: 
   name: EC2-Agents
@@ -14,7 +14,7 @@ stages:
   jobs:
     - job: HelloJob
       steps:
-        - script: echo "hello Azure Devops!"
+        - script: echo "Hello there from $(userName)"
 
 
 
