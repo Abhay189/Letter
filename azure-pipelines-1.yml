@@ -12,7 +12,7 @@ pool:
 stages:
 - stage: Hello
   jobs:
-    - job: Hello-job
+    - job: HelloJob
       steps:
         - script: echo "hello Azure Devops!"
 
