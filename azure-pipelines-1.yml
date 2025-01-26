@@ -51,7 +51,7 @@ stages:
         docker run --name letter-backend-container -p 8000:8000 -e USE_SQLITE_FOR_TESTS=true $(containerRegistryName)/$(dockerImageName):$(dockerImageTag)
         
         echo "Executing django API Testcases"
-        docker exec letter-backend-container /bin/bash -c python manage.py test chat.tests.test
+        docker exec letter-backend-container python manage.py test chat.tests.test
 
         echo "Stopping docker container" 
         docker stop letter-backend-container
