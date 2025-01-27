@@ -81,7 +81,7 @@ stages:
   jobs: 
     - job: Cleanup_Job
       steps:
-      - scripts: | 
+      - script: | 
           echo "Removing latest build docker images"
           docker rmi $(containerRegistryName)/$(dockerImageName):latest
           docker rmi $(containerRegistryName)/$(dockerImageName):$(dockerImageTag)
