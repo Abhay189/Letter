@@ -32,6 +32,10 @@ stages:
 
             echo "Building docker image from the git repository"
             docker build -t $(containerRegistryName)/$(dockerImageName):$(dockerImageTag) ./Backend
+
+            echo "Removing local git repository"
+            pwd
+            echo "\n\n\n"
           displayName: Building docker image
 
 # Testing stage 
@@ -71,6 +75,17 @@ stages:
           echo "Pushing Docker image latest to ACR registry"
           docker push $(containerRegistryName)/$(dockerImageName):latest
         displayName: Deploying Docker image to ACR 
+
+
+- stage: Cleanup
+  jobs: 
+    - job: Cleanup_Job
+      steps:
+      - scripts: | 
+          echo "Removing latest build docker images"
+          docker rmi $(containerRegistryName)/$(dockerImageName):latest
+          docker rmi $(containerRegistryName)/$(dockerImageName):$(dockerImageTag)
+
 
 
 
