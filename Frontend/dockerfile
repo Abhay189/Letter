@@ -1,0 +1,17 @@
+# Use a lightweight Node.js image
+FROM node:18-alpine
+
+# Set the working directory inside the container
+WORKDIR /app
+
+# Copy package.json and package-lock.json (if available) for dependency installation
+COPY package.json package-lock.json* ./
+
+# Install dependencies
+RUN npm install
+
+# Expose the port Vite uses for development
+EXPOSE 5173
+
+# Start the Vite development server
+CMD ["npm", "run", "dev", "--", "--host"]
