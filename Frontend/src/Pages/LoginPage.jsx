@@ -13,7 +13,7 @@ const LoginPage = () => {
     e.preventDefault();
 
     // Dummy API endpoint (replace with your actual backend)
-    const API_URL = "https://example.com/api/login";
+    const API_URL = "http://localhost:8000/api/login/";
 
     try {
       const response = await fetch(API_URL, {

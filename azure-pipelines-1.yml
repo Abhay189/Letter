@@ -25,6 +25,36 @@ pool:
   name: EC2-Agents
 
 stages:
+
+- stage: SonarQube_Scan
+  jobs:
+    - job: SonarQube_Analysis
+      steps:
+        - checkout: self
+
+        - task: SonarQubePrepare@4
+          inputs:
+            SonarQube: "SonarQubeService"
+            scannerMode: "CLI"
+            configMode: "manual"
+            cliProjectKey: "Letter_Backend"
+            cliSources: "Backend"
+          displayName: "Prepare SonarQube Scanner"
+
+        - script: |
+            sonar-scanner \
+              -Dsonar.projectKey=Letter_Backend \
+              -Dsonar.sources=Backend \
+              -Dsonar.host.url=$(SONARQUBE_URL) \
+              -Dsonar.login=$(SONARQUBE_TOKEN)
+          displayName: "Run SonarQube Scan"
+
+        - task: SonarQubePublish@4
+          inputs:
+            pollingTimeoutSec: "300"
+          displayName: "Publish SonarQube Results"
+
+
 - stage: Build
   jobs:
     - job: Docker_Image_Build 
@@ -32,15 +62,10 @@ stages:
         - task: DockerInstaller@0
           displayName: Install Docker 
         - script: | 
-            echo "Cloning Git repository into host environment"
-            git clone $(githubRegistry)
-
             echo "Building docker image from the git repository"
             docker build -t $(containerRegistryName)/$(dockerImageName):$(dockerImageTag) ./Backend
 
             echo "Removing local git repository"
-            pwd
-            echo "\n\n\n"
           displayName: Building docker image
 
 - stage: Testing 
