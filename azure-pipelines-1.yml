@@ -31,19 +31,18 @@ stages:
     - job: SonarQube_Analysis
       steps:
         - checkout: self
-
         - task: SonarQubePrepare@4
           inputs:
-            SonarQube: "SonarQubeService"
+            SonarQube: "SonarCloudService"
             scannerMode: "CLI"
             configMode: "manual"
-            cliProjectKey: "Letter_Backend"
+            cliProjectKey: "Abhay189_Letter"
             cliSources: "Backend"
           displayName: "Prepare SonarQube Scanner"
 
         - script: |
             sonar-scanner \
-              -Dsonar.projectKey=Letter_Backend \
+              -Dsonar.projectKey=Abhay189_Letter \
               -Dsonar.sources=Backend \
               -Dsonar.host.url=$(SONARQUBE_URL) \
               -Dsonar.login=$(SONARQUBE_TOKEN)
