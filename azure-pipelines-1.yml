@@ -30,28 +30,28 @@ stages:
   jobs:
     - job: SonarQube_Analysis
       steps:
-        - checkout: self
-        - task: SonarQubePrepare@4
-          inputs:
-            SonarQube: "SonarCloudService"
-            scannerMode: "CLI"
-            configMode: "manual"
-            cliProjectKey: "Abhay189_Letter"
-            cliSources: "Backend"
-          displayName: "Prepare SonarQube Scanner"
+      - checkout: self
+      - task: SonarCloudPrepare@1
+        inputs:
+          SonarCloud: "SonarCloudService"
+          organization: "abhay189"
+          scannerMode: "CLI"
+          configMode: "manual"
+          cliProjectKey: "Abhay189_Letter"
+          cliSources: "Backend"
 
-        - script: |
-            sonar-scanner \
-              -Dsonar.projectKey=Abhay189_Letter \
-              -Dsonar.sources=Backend \
-              -Dsonar.host.url=$(SONARQUBE_URL) \
-              -Dsonar.login=$(SONARQUBE_TOKEN)
-          displayName: "Run SonarQube Scan"
+      - script: |
+          sonar-scanner \
+            -Dsonar.projectKey=Abhay189_Letter \
+            -Dsonar.sources=Backend \
+            -Dsonar.host.url=$(SONARQUBE_URL) \
+            -Dsonar.login=$(SONARQUBE_TOKEN)
+        displayName: "Run SonarQube Scan"
 
-        - task: SonarQubePublish@4
-          inputs:
-            pollingTimeoutSec: "300"
-          displayName: "Publish SonarQube Results"
+      - task: SonarCloudPublish@1
+        inputs:
+          pollingTimeoutSec: "300"
+        displayName: "Publish SonarCloud Results"
 
 
 - stage: Build
