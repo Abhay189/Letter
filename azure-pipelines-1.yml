@@ -40,8 +40,13 @@ stages:
           cliProjectKey: "Abhay189_Letter"
           cliSources: "Backend"
 
-      - task: SonarCloudAnalyze@1
-        displayName: "Run SonarCloud Analysis"
+      - script: |
+          sonar-scanner \
+            -Dsonar.projectKey=Abhay189_Letter \
+            -Dsonar.sources=Backend \
+            -Dsonar.host.url=https://sonarcloud.io \
+            -Dsonar.login=$(SONARQUBE_TOKEN)
+        displayName: "Run SonarQube Scan"
 
       - task: SonarCloudPublish@1
         inputs:
