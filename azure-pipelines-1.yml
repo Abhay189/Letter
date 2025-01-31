@@ -41,7 +41,7 @@ stages:
           cliSources: "Backend"
 
       - script: |
-          export PATH=$PATH:/opt/sonar-scanner/bin
+          export PATH=$PATH:/home/ubuntu/sonar-scanner/sonar-scanner/bin/sonar-scanner
           sonar-scanner \
             -Dsonar.projectKey=Abhay189_Letter \
             -Dsonar.sources=Backend \
