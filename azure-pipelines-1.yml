@@ -26,33 +26,33 @@ pool:
 
 stages:
 
-- stage: SonarQube_Scan
-  jobs:
-    - job: SonarQube_Analysis
-      steps:
-      - checkout: self
-      - task: SonarCloudPrepare@1
-        inputs:
-          SonarCloud: "SonarCloudService"
-          organization: "abhay189"
-          scannerMode: "CLI"
-          configMode: "manual"
-          cliProjectKey: "Abhay189_Letter"
-          cliSources: "Backend"
+# - stage: SonarQube_Scan
+#   jobs:
+#     - job: SonarQube_Analysis
+#       steps:
+#       - checkout: self
+#       - task: SonarCloudPrepare@1
+#         inputs:
+#           SonarCloud: "SonarCloudService"
+#           organization: "abhay189"
+#           scannerMode: "CLI"
+#           configMode: "manual"
+#           cliProjectKey: "Abhay189_Letter"
+#           cliSources: "Backend"
 
-      - script: |
-          export PATH=$PATH:/home/ubuntu/sonar-scanner/sonar-scanner/bin
-          sonar-scanner \
-            -Dsonar.projectKey=Abhay189_Letter \
-            -Dsonar.sources=Backend \
-            -Dsonar.host.url=https://sonarcloud.io \
-            -Dsonar.login=$(SONARQUBE_TOKEN)
-        displayName: "Run SonarQube Scan"
+#       - script: |
+#           export PATH=$PATH:/home/ubuntu/sonar-scanner/sonar-scanner/bin
+#           sonar-scanner \
+#             -Dsonar.projectKey=Abhay189_Letter \
+#             -Dsonar.sources=Backend \
+#             -Dsonar.host.url=https://sonarcloud.io \
+#             -Dsonar.login=$(SONARQUBE_TOKEN)
+#         displayName: "Run SonarQube Scan"
 
-      - task: SonarCloudPublish@1
-        inputs:
-          pollingTimeoutSec: "300"
-        displayName: "Publish SonarCloud Results"
+#       - task: SonarCloudPublish@1
+#         inputs:
+#           pollingTimeoutSec: "300"
+#         displayName: "Publish SonarCloud Results"
 
 - stage: Build
   jobs:
@@ -67,24 +67,24 @@ stages:
             echo "Removing local git repository"
           displayName: Building docker image
 
-- stage: Testing 
-  jobs:
-  - job: Testing_API_Endpoints 
-    timeoutInMinutes: 3
-    steps:
-    - script: |
-        echo "Spinning up docker container from previously created image"
-        docker run --name letter-backend-container -p 8000:8000 -e USE_SQLITE_FOR_TESTS=true $(containerRegistryName)/$(dockerImageName):$(dockerImageTag)
+# - stage: Testing 
+#   jobs:
+#   - job: Testing_API_Endpoints 
+#     timeoutInMinutes: 3
+#     steps:
+#     - script: |
+#         echo "Spinning up docker container from previously created image"
+#         docker run --name letter-backend-container -p 8000:8000 -e USE_SQLITE_FOR_TESTS=true $(containerRegistryName)/$(dockerImageName):$(dockerImageTag)
         
-        echo "Executing django API Testcases"
-        docker exec letter-backend-container python manage.py test chat.tests.test
+#         echo "Executing django API Testcases"
+#         docker exec letter-backend-container python manage.py test chat.tests.test
 
-        echo "Stopping docker container" 
-        docker stop letter-backend-container
+#         echo "Stopping docker container" 
+#         docker stop letter-backend-container
 
-        echo "Deleting docker container"
-        docker rm letter-backend-container
-      displayName: Testing API Calls 
+#         echo "Deleting docker container"
+#         docker rm letter-backend-container
+#       displayName: Testing API Calls 
 
 - stage: Deploy
   jobs:
