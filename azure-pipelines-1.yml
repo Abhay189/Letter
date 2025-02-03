@@ -54,7 +54,6 @@ stages:
           pollingTimeoutSec: "300"
         displayName: "Publish SonarCloud Results"
 
-
 - stage: Build
   jobs:
     - job: Docker_Image_Build 
@@ -87,7 +86,6 @@ stages:
         docker rm letter-backend-container
       displayName: Testing API Calls 
 
-
 - stage: Deploy
   jobs:
     - job: Deploy_Image_To_ACR
@@ -105,7 +103,6 @@ stages:
           echo "Pushing Docker image latest to ACR registry"
           docker push $(containerRegistryName)/$(dockerImageName):latest
         displayName: Deploying Docker image to ACR 
-
 
 - stage: Cleanup
   jobs: 
