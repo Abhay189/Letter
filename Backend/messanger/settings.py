@@ -1,6 +1,5 @@
 from pathlib import Path
 import os
-import sys
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -56,24 +55,16 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'messanger.wsgi.application'
 
-if 'test' in sys.argv or os.getenv('USE_SQLITE_FOR_TESTS', 'false') == 'true':
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': os.path.join(BASE_DIR, 'test_db.sqlite3'),
-        }
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME':  os.environ.get('MYSQL_DB'),
+        'USER': os.environ.get('MYSQL_USER'),
+        'PASSWORD': os.environ.get('MYSQL_PASSWORD'),
+        'HOST': os.environ.get('MYSQL_HOSTNAME'),
+        'PORT': os.environ.get('MYSQL_PORT'),
     }
-else:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.mysql',
-            'NAME': 'letter_db',
-            'USER': 'root',
-            'PASSWORD': 'abhay532',
-            'HOST': os.getenv('DATABASE_HOST', 'mysql'),
-            'PORT': '3306',
-        }
-    }
+}
 
 AUTH_PASSWORD_VALIDATORS = [
     {
