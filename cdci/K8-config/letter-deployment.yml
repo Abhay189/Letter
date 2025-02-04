@@ -1,0 +1,65 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: letter-backend-app
+spec:
+  replicas: 2  # Number of pod replicas
+  selector:
+    matchLabels:
+      app: letter-backend-app
+  template:
+    metadata:
+      labels:
+        app: letter-backend-app
+    spec:
+      imagePullSecrets:
+      - name: acr-secret  # Reference the name of the secret here
+      containers:
+      - name: letter-app
+        image: letterregistry.azurecr.io/letter_backend:latest  # Public ACR image
+        ports:
+        - containerPort: 8000
+        env:
+        - name: MYSQL_USER
+          valueFrom:
+            secretKeyRef:
+              name: mysql-secret
+              key: MYSQL_USER
+        - name: MYSQL_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mysql-secret
+              key: MYSQL_PASSWORD
+        - name: MYSQL_DB
+          valueFrom:
+            secretKeyRef:
+              name: mysql-secret
+              key: MYSQL_DB
+        - name: MYSQL_HOSTNAME
+          valueFrom:
+            secretKeyRef:
+              name: mysql-secret
+              key: MYSQL_HOSTNAME
+        - name: MYSQL_PORT
+          valueFrom:
+            secretKeyRef:
+              name: mysql-secret
+              key: MYSQL_PORT
+
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: letter-backend-service
+spec:
+  selector:
+    app: letter-backend-app
+  type: NodePort     
+  ports:
+    - protocol: TCP
+      port: 8000
+      targetPort: 8000
+      nodePort: 30000
+  

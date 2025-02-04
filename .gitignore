@@ -2,3 +2,4 @@
 migrations/
 myenv/
 __pycache__/
+.k8-secrets/
