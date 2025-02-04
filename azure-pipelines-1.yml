@@ -31,7 +31,7 @@ stages:
     - job: SonarQube_Analysis
       steps:
       - checkout: self
-      - task: SonarCloudPrepare@1
+      - task: SonarCloudPrepare@3
         inputs:
           SonarCloud: "SonarCloudService"
           organization: "abhay189"
