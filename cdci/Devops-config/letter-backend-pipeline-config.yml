@@ -148,7 +148,7 @@ stages:
       displayName: "Set Up kubectl with EKS"
     
     - script: |
-        kubectl set image deployment/letter-backend-deployment letter-backend-container=letterregistry.azurecr.io/letter_backend:$(dockerImageTag)
+        kubectl set image deployment/letter-backend-app letter-app=$(containerRegistryName)/$(dockerImageName):$(dockerImageTag)
         kubectl rollout status deployment/letter-backend-deployment 
       displayName: "Deploy Updated Image to Kubernetes"
 
