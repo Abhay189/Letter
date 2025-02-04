@@ -26,33 +26,33 @@ pool:
 
 stages:
 
-# - stage: SonarQube_Scan
-#   jobs:
-#     - job: SonarQube_Analysis
-#       steps:
-#       - checkout: self
-#       - task: SonarCloudPrepare@1
-#         inputs:
-#           SonarCloud: "SonarCloudService"
-#           organization: "abhay189"
-#           scannerMode: "CLI"
-#           configMode: "manual"
-#           cliProjectKey: "Abhay189_Letter"
-#           cliSources: "Backend"
+- stage: SonarQube_Scan
+  jobs:
+    - job: SonarQube_Analysis
+      steps:
+      - checkout: self
+      - task: SonarCloudPrepare@1
+        inputs:
+          SonarCloud: "SonarCloudService"
+          organization: "abhay189"
+          scannerMode: "CLI"
+          configMode: "manual"
+          cliProjectKey: "Abhay189_Letter"
+          cliSources: "Backend"
 
-#       - script: |
-#           export PATH=$PATH:/home/ubuntu/sonar-scanner/sonar-scanner/bin
-#           sonar-scanner \
-#             -Dsonar.projectKey=Abhay189_Letter \
-#             -Dsonar.sources=Backend \
-#             -Dsonar.host.url=https://sonarcloud.io \
-#             -Dsonar.login=$(SONARQUBE_TOKEN)
-#         displayName: "Run SonarQube Scan"
+      - script: |
+          export PATH=$PATH:/home/ubuntu/sonar-scanner/sonar-scanner/bin
+          sonar-scanner \
+            -Dsonar.projectKey=Abhay189_Letter \
+            -Dsonar.sources=Backend \
+            -Dsonar.host.url=https://sonarcloud.io \
+            -Dsonar.login=$(SONARQUBE_TOKEN)
+        displayName: "Run SonarQube Scan"
 
-#       - task: SonarCloudPublish@1
-#         inputs:
-#           pollingTimeoutSec: "300"
-#         displayName: "Publish SonarCloud Results"
+      - task: SonarCloudPublish@1
+        inputs:
+          pollingTimeoutSec: "300"
+        displayName: "Publish SonarCloud Results"
 
 - stage: Build
   jobs:
