@@ -149,7 +149,7 @@ stages:
     
     - script: |
         kubectl set image deployment/letter-backend-app letter-app=$(containerRegistryName)/$(dockerImageName):$(dockerImageTag)
-        kubectl rollout status deployment/letter-backend-deployment 
+        kubectl rollout status deployment/letter-backend-app
       displayName: "Deploy Updated Image to Kubernetes"
 
 
