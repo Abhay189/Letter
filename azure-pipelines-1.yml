@@ -49,7 +49,7 @@ stages:
             -Dsonar.login=$(SONARQUBE_TOKEN)
         displayName: "Run SonarQube Scan"
 
-      - task: SonarCloudPublish@1
+      - task: SonarCloudPublish@3
         inputs:
           pollingTimeoutSec: "300"
         displayName: "Publish SonarCloud Results"
