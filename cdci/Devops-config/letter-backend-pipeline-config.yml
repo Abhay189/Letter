@@ -123,6 +123,7 @@ stages:
         unzip awscliv2.zip
         sudo ./aws/install
         aws --version
+        rm -rf awscliv2.zip
       displayName: "Install AWS CLI"
 
     - script: |
@@ -151,8 +152,6 @@ stages:
         kubectl set image deployment/letter-backend-app letter-app=$(containerRegistryName)/$(dockerImageName):$(dockerImageTag)
         kubectl rollout status deployment/letter-backend-app
       displayName: "Deploy Updated Image to Kubernetes"
-
-
 
 - stage: Cleanup
   condition: always()  
