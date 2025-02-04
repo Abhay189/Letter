@@ -67,24 +67,24 @@ stages:
             echo "Removing local git repository"
           displayName: Building docker image
 
-# - stage: Testing 
-#   jobs:
-#   - job: Testing_API_Endpoints 
-#     timeoutInMinutes: 3
-#     steps:
-#     - script: |
-#         echo "Spinning up docker container from previously created image"
-#         docker run --name letter-backend-container -p 8000:8000 -e USE_SQLITE_FOR_TESTS=true $(containerRegistryName)/$(dockerImageName):$(dockerImageTag)
+- stage: Testing 
+  jobs:
+  - job: Testing_API_Endpoints 
+    timeoutInMinutes: 3
+    steps:
+    - script: |
+        echo "Spinning up docker container from previously created image"
+        docker run --name letter-backend-container -p 8000:8000 $(containerRegistryName)/$(dockerImageName):$(dockerImageTag)
         
-#         echo "Executing django API Testcases"
-#         docker exec letter-backend-container python manage.py test chat.tests.test
+        echo "Executing django API Testcases"
+        docker exec letter-backend-container python manage.py test chat.tests.test
 
-#         echo "Stopping docker container" 
-#         docker stop letter-backend-container
+        echo "Stopping docker container" 
+        docker stop letter-backend-container
 
-#         echo "Deleting docker container"
-#         docker rm letter-backend-container
-#       displayName: Testing API Calls 
+        echo "Deleting docker container"
+        docker rm letter-backend-container
+      displayName: Testing API Calls 
 
 - stage: Deploy
   jobs:
