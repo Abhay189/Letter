@@ -19,6 +19,12 @@ variables:
 - name: dockerImageTag
   value: $(Build.BuildId)
 
+- name: AWS_REGION
+  value: ap-south-1
+
+- name: EKS_CLUSTER_NAME
+  value: my-cluster
+
 - group: letter-backend-variable-group 
 
 pool: 
@@ -85,9 +91,9 @@ stages:
         docker rm letter-backend-container
       displayName: Testing API Calls 
 
-- stage: Deploy
+- stage: Artifact_storage
   jobs:
-  - job: Deploy_Image_To_ACR
+  - job: Storing_Image_Artifact_In_ACR
     steps:
     - script: | 
         echo "Logging in to ACR..."
@@ -101,7 +107,52 @@ stages:
 
         echo "Pushing Docker image latest to ACR registry"
         docker push $(containerRegistryName)/$(dockerImageName):latest
-      displayName: Deploying Docker image to ACR 
+      displayName: Storing Docker image in ACR 
+
+- stage: Deploy
+  dependsOn: Artifact_storage
+  condition: succeeded()
+  jobs:
+  - job: Deploy_to_Kubernetes
+    steps:
+    - script: |
+        echo "Installing AWS CLI..."
+        sudo apt update
+        sudo apt install -y curl unzip
+        curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+        unzip awscliv2.zip
+        sudo ./aws/install
+        aws --version
+      displayName: "Install AWS CLI"
+
+    - script: |
+        echo "Installing kubectl..."
+        curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+        chmod +x kubectl
+        sudo mv kubectl /usr/local/bin/
+        kubectl version --client
+      displayName: "Install kubectl"
+
+    - script: |
+        echo "Logging into AWS CLI..."
+        aws configure set aws_access_key_id $(AWS_ACCESS_KEY_ID)
+        aws configure set aws_secret_access_key $(AWS_SECRET_ACCESS_KEY)
+        aws configure set region $(AWS_REGION)
+        aws sts get-caller-identity
+      displayName: "Authenticate AWS CLI"
+
+    - script: |
+        echo "Configuring kubectl for EKS..."
+        aws eks --region $(AWS_REGION) update-kubeconfig --name $(EKS_CLUSTER_NAME)
+        kubectl get nodes
+      displayName: "Set Up kubectl with EKS"
+    
+    - script: |
+        kubectl set image deployment/letter-backend-deployment letter-backend-container=letterregistry.azurecr.io/letter_backend:$(dockerImageTag)
+        kubectl rollout status deployment/letter-backend-deployment 
+      displayName: "Deploy Updated Image to Kubernetes"
+
+
 
 - stage: Cleanup
   condition: always()  
