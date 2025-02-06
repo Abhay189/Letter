@@ -79,7 +79,13 @@ stages:
     steps:
     - script: |
         echo "Spinning up docker container from previously created image"
-        docker run --name letter-backend-container -p 8000:8000 $(containerRegistryName)/$(dockerImageName):$(dockerImageTag)
+        docker run --name letter-backend-container -p 8000:8000 \
+          -e MYSQL_HOSTNAME=$(MYSQL_HOST) \
+          -e MYSQL_USER=$(MYSQL_USER) \
+          -e MYSQL_PASSWORD=$(MYSQL_PASSWORD) \
+          -e MYSQL_DB=$(MYSQL_DB) \
+          -e MYSQL_PORT=$(MYSQL_PORT) \
+          $(containerRegistryName)/$(dockerImageName):$(dockerImageTag)
         
         echo "Executing django API Testcases"
         docker exec letter-backend-container python manage.py test chat.tests.test
