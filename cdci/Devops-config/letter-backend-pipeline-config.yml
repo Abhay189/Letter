@@ -31,8 +31,27 @@ pool:
   name: EC2-Agents
 
 stages:
+- stage: Build
+  jobs:
+  - job: Docker_Image_Build 
+    steps:
+    - script: | 
+        echo "Building docker image from the git repository"
+        docker build -t $(containerRegistryName)/$(dockerImageName):$(dockerImageTag) ./Backend
+
+        echo "Logging in to ACR..."
+        docker login $(containerRegistryName) -u $(DOCKER_USERNAME) -p $(DOCKER_PASSWORD)
+
+        echo "Tagging Docker image with untested tag..."
+        docker tag $(containerRegistryName)/$(dockerImageName):$(dockerImageTag) $(containerRegistryName)/$(dockerImageName):untested
+
+        echo "Pushing untested Docker image to ACR registry"
+        docker push $(containerRegistryName)/$(dockerImageName):untested
+
+      displayName: Building docker image
 
 - stage: SonarQube_Scan
+  dependsOn: [Build]
   jobs:
   - job: SonarQube_Analysis
     steps:
@@ -60,19 +79,8 @@ stages:
         pollingTimeoutSec: "300"
       displayName: "Publish SonarCloud Results"
 
-- stage: Build
-  dependsOn: SonarQube_Scan
-  condition: succeeded()
-  jobs:
-  - job: Docker_Image_Build 
-    steps:
-    - script: | 
-        echo "Building docker image from the git repository"
-        docker build -t $(containerRegistryName)/$(dockerImageName):$(dockerImageTag) ./Backend
-
-      displayName: Building docker image
-
 - stage: Testing 
+  dependsOn: [Build]
   jobs:
   - job: Testing_API_Endpoints 
     timeoutInMinutes: 3
@@ -98,6 +106,7 @@ stages:
       displayName: Testing API Calls 
 
 - stage: Artifact_storage
+  dependsOn: [Testing,SonarQube_Scan]
   jobs:
   - job: Storing_Image_Artifact_In_ACR
     steps:
@@ -117,7 +126,6 @@ stages:
 
 - stage: Deploy
   dependsOn: Artifact_storage
-  condition: succeeded()
   jobs:
   - job: Deploy_to_Kubernetes
     steps:
