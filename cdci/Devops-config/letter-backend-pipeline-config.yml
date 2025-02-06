@@ -160,12 +160,6 @@ stages:
     workspace:
       clean: all  
     steps:
-    - script: | 
-        echo "Removing latest build docker images"
-        docker rmi $(containerRegistryName)/$(dockerImageName):latest
-        docker rmi $(containerRegistryName)/$(dockerImageName):$(dockerImageTag)
-      displayName: "Remove Docker Images"
-
     - script: |
         docker system prune -af
       displayName: "Remove Unused Docker Resources"
