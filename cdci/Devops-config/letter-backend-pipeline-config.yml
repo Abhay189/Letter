@@ -38,7 +38,9 @@ stages:
     - script: | 
         echo "Building docker image from the git repository"
         docker build -t $(containerRegistryName)/$(dockerImageName):$(dockerImageTag) ./Backend
+      displayName: Building docker image
 
+    - script: | 
         echo "Logging in to ACR..."
         docker login $(containerRegistryName) -u $(DOCKER_USERNAME) -p $(DOCKER_PASSWORD)
 
@@ -47,9 +49,9 @@ stages:
 
         echo "Pushing untested Docker image to ACR registry"
         docker push $(containerRegistryName)/$(dockerImageName):untested
-
-      displayName: Building docker image
-
+      
+      displayName: Pushing untested image to ACR
+      
 - stage: SonarQube_Scan
   dependsOn: [Build]
   jobs:
@@ -93,7 +95,7 @@ stages:
           -e MYSQL_PASSWORD=$(MYSQL_PASSWORD) \
           -e MYSQL_DB=$(MYSQL_DB) \
           -e MYSQL_PORT=$(MYSQL_PORT) \
-          $(containerRegistryName)/$(dockerImageName):$(dockerImageTag)
+          $(containerRegistryName)/$(dockerImageName):untested
         
         echo "Executing django API Testcases"
         docker exec letter-backend-container python manage.py test chat.tests.test
