@@ -35,6 +35,8 @@ stages:
   jobs:
   - job: Docker_Image_Build 
     steps:
+    - checkout: self
+
     - script: | 
         echo "Building docker image from the git repository"
         docker build -t $(containerRegistryName)/$(dockerImageName):$(dockerImageTag) ./Backend
