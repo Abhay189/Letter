@@ -1,6 +1,8 @@
 
 
 import { _get, _post, _put, _delete } from '../apiClient';
+import { useState, useEffect } from "react";
+ 
 
 export interface ServerApiContactDetails {
     contact_name: string;
@@ -71,28 +73,21 @@ function addAllContactsToDic(contactDetailsList: ContactDetails[]){
 }
 
 // Function to get all contacts for a user
+
 export async function getContactDetailsOfAllContacts(userId: string): Promise<[ContactDetails[], ContactDetailsById]> {
-    var request = require('request');
-    var options = {
-        'method': 'GET',
-        'url': 'http://127.0.0.1:8000/api/contacts',
-        'headers': {
+    const response = await _get('/api/contacts', {
+        headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({
-            "id": "1"
-        })
+        url: '/api/contacts',
+        data: { id: userId } // Pass user ID as a parameter
+    });   
     
-    };
-   
-      
-    
-    const response = await _get('/api/contacts', {
-        data: JSON.stringify({ "id": "1" }) // Pass user ID as a parameter
-    });
     const contactDetailsList = response.data.map(convertServerApiContactDetailsFieldNames); // Store the received data
     const contactDetailsById = addAllContactsToDic(contactDetailsList);
-    return [contactDetailsList, contactDetailsById] ;
+    
+    return [contactDetailsList, contactDetailsById];
+    
 }
 // This func is the same as the one above by the same name but it is for development purposes only as it return hard-coded values rather than returning the requested data from the server
 // export function getContactDetailsOfAllContacts(): [ContactDetails[], ContactDetailsById] {

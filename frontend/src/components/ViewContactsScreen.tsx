@@ -1,5 +1,5 @@
 //external imports:
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Fragment } from 'react';
 
 //api requests imports:
@@ -49,13 +49,22 @@ export function ViewContactsScreen() {
     const initSelectedContactId = returnDefaultParamValIfNoneProvided(params); 
     const [selectedContactId, setselectedContactId] = useState(initSelectedContactId);   
 
-    const [[contactDetailsOfAllContacts, contactDetailsById], setContactDetailsListAndById] = useState(contact_details.getContactDetailsOfAllContacts());
-    let [whichSubScreenShowing, setWhichSubScreenShowing] = useState(viewContactsScreenSubscreenState.SHOW_VIEW_CONTACT_DETAILS_SCREEN);
+    const [contactDetailsOfAllContacts, setContactDetailsOfAllContacts] = useState<contact_details.ContactDetails[]>([]); 
+    const [contactDetailsById, setContactDetailsById] = useState<contact_details.ContactDetailsById>({});
+    useEffect(() => {
+        async function fetchData() {
+                const [list, byId] = await contact_details.getContactDetailsOfAllContacts("1");
+                setContactDetailsOfAllContacts(list);
+                setContactDetailsById(byId);
+            }
+            fetchData();
+    }, []);
 
+    let [whichSubScreenShowing, setWhichSubScreenShowing] = useState(viewContactsScreenSubscreenState.SHOW_VIEW_CONTACT_DETAILS_SCREEN);
     const getSubScreen = () => {
         return whichSubScreenShowing === viewContactsScreenSubscreenState.SHOW_VIEW_CONTACT_DETAILS_SCREEN
         ? 
-        <ViewContactDetailsScreen contactDetailsById={contactDetailsById} selectedContactId={selectedContactId} setselectedContactId={setselectedContactId} setContactDetailsListAndById={setContactDetailsListAndById}/> 
+        <ViewContactDetailsScreen contactDetailsById={contactDetailsById} selectedContactId={selectedContactId} setselectedContactId={setselectedContactId} setContactDetailsListAndById={setContactDetailsById}/> 
         : 
         <AddContactScreen/>;
     }
